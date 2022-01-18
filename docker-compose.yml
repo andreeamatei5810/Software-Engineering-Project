@@ -1,0 +1,23 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=smart-farming
+      - POSTGRES_USER=smart-farming
+      - POSTGRES_PASSWORD=smart-farming
+
+#version: '3'
+#services:
+#  mysql:
+#    image: mysql
+#    ports:
+#      - 3306:3306
+#    environment:
+#      - MYSQL_ROOT_PASSWORD= parola_voastra_a_userului_root_de_pe_mysql
+#      - MYSQL_DATABASE=smart-farming
+#      - MYSQL_USER=smart-farming
+#      - MYSQL_PASSWORD=smart-farming
+ 
