@@ -1,4 +1,4 @@
-package com.example.smartfarming.model;
+package com.example.smartfarming.entity;
 
 import lombok.Getter;
 import lombok.Setter;
