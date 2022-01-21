@@ -1,4 +1,4 @@
-package com.example.smartfarming.model;
+package com.example.smartfarming.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +15,20 @@ public class Crop {
 
     @Id
     String id;
+    @Column(unique = true)
     String name;
-    Float height ;
+    Long height ;
     String leafColor;
-    Float leafTemperature;
+    Long leafTemperature;
 
+
+    @Override
+    public String toString() {
+        return "Crop{" +
+                " name='" + name + '\'' +
+                ", height=" + height +
+                ", leafColor='" + leafColor + '\'' +
+                ", leafTemperature=" + leafTemperature +
+                '}';
+    }
 }

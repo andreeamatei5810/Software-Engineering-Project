@@ -1,0 +1,17 @@
+[
+    {
+      "name":"Pumpkin", "height":20, "leaf color": "Orange", "leaf temperature": 23
+    },
+    {
+      "name":"Carrot", "height":30, "leaf color": "Green", "leaf temperature": 20
+    },
+    {
+        "name":"Bean", "height":35, "leaf color": "Green", "leaf temperature": 21
+    },
+    {
+      "name":"Potato", "height":25, "leaf color": "Light green", "leaf temperature": 16
+    },
+    {
+      "name":"Lentil", "height":20, "leaf color": "Yellow", "leaf temperature": 18
+    }
+]

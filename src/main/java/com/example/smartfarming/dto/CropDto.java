@@ -11,7 +11,18 @@ import java.util.Date;
 public class CropDto {
 
     String name;
-    Float height ;
+    Long height ;
     String leafColor;
-    Float leafTemperature;
+    Long leafTemperature;
+
+    public CropDto(String name, Long height, String leafColor, Long leafTemperature) {
+        this.name = name;
+        this.height = height;
+        this.leafColor = leafColor;
+        this.leafTemperature = leafTemperature;
+    }
+
+    public CropDto() {
+
+    }
 }
