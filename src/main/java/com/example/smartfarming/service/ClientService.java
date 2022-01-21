@@ -1,7 +1,7 @@
 package com.example.smartfarming.service;
 
 import com.example.smartfarming.dto.ClientRegister;
-import com.example.smartfarming.model.Client;
+import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;

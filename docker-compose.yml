@@ -8,16 +8,22 @@ services:
       - POSTGRES_DB=smart-farming
       - POSTGRES_USER=smart-farming
       - POSTGRES_PASSWORD=smart-farming
+  mqtt:
+    image: eclipse-mosquitto
+    volumes:
+      - mosquitto_conf:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    networks:
+      - mqttnet
+    ports:
+      - 9001:9001
+      - 1883:1883
 
-#version: '3'
-#services:
-#  mysql:
-#    image: mysql
-#    ports:
-#      - 3306:3306
-#    environment:
-#      - MYSQL_ROOT_PASSWORD= parola_voastra_a_userului_root_de_pe_mysql
-#      - MYSQL_DATABASE=smart-farming
-#      - MYSQL_USER=smart-farming
-#      - MYSQL_PASSWORD=smart-farming
- 
+volumes:
+  mosquitto_conf:
+  mosquitto_data:
+  mosquitto_log:
+networks:
+  mqttnet:
+    driver: bridge

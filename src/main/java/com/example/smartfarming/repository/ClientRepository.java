@@ -1,6 +1,6 @@
 package com.example.smartfarming.repository;
 
-import com.example.smartfarming.model.Client;
+import com.example.smartfarming.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
