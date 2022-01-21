@@ -15,19 +15,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MqttController {
 
-    final MessagingService messagingService;
+	final MessagingService messagingService;
 
-    @PostMapping("/publish")
-    public void publishMessage(@RequestBody @Valid PublishMessage publishMessage) throws MqttException {
+	@PostMapping("/publish")
+	public void publishMessage(@RequestBody @Valid PublishMessage publishMessage) throws MqttException {
 
-        messagingService.publish(publishMessage);
-    }
+		messagingService.publish(publishMessage);
+	}
 
-    @GetMapping("subscribe")
-    public List<MqttSubscribeModel> subscribeChannel(@RequestParam(value = "topic") String topic,
-                                                     @RequestParam(value = "wait_millis") Integer waitMillis)
-            throws InterruptedException, MqttException {
+	@GetMapping("/subscribe")
+	public MqttSubscribeModel subscribeChannel(@RequestParam(value = "topic") String topic,
+											   @RequestParam(value = "wait_millis") Integer waitMillis)
+			throws InterruptedException, MqttException {
 
-        return messagingService.subscribeList(topic, waitMillis);
-    }
+		return messagingService.subscribeList(topic, waitMillis);
+	}
+
+	@GetMapping("/all")
+	public List<MqttSubscribeModel> showAllReceived() {
+		return messagingService.showAllReceived();
+	}
 }

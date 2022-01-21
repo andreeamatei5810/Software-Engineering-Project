@@ -16,58 +16,56 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class MessagingService {
 
-    @Autowired
-    private IMqttClient mqttClient;
+	@Autowired
+	private IMqttClient mqttClient;
+	List<MqttSubscribeModel> messages = new ArrayList<>();
 
-    public void publish(final String topic, final String payload, int qos, boolean retained)
-            throws MqttException {
-        MqttMessage mqttMessage = new MqttMessage();
-        mqttMessage.setPayload(payload.getBytes());
-        mqttMessage.setQos(qos);
-        mqttMessage.setRetained(retained);
+	public void publish(final String topic, final String payload, int qos, boolean retained)
+			throws MqttException {
+		MqttMessage mqttMessage = new MqttMessage();
+		mqttMessage.setPayload(payload.getBytes());
+		mqttMessage.setQos(qos);
+		mqttMessage.setRetained(retained);
 
-        mqttClient.publish(topic, mqttMessage);
+		mqttClient.publish(topic, mqttMessage);
+	}
 
-        //mqttClient.publish(topic, payload.getBytes(), qos, retained);
+	public void publish(PublishMessage publishMessage)
+			throws MqttException {
+		MqttMessage mqttMessage = new MqttMessage();
+		mqttMessage.setPayload(publishMessage.getMessage().getBytes());
+		mqttMessage.setQos(publishMessage.getQos());
+		mqttMessage.setRetained(publishMessage.getRetained());
 
-        mqttClient.disconnect();
-    }
+		mqttClient.publish(publishMessage.getTopic(), mqttMessage);
+	}
 
-    public void publish(PublishMessage publishMessage)
-            throws MqttException {
-        MqttMessage mqttMessage = new MqttMessage();
-        mqttMessage.setPayload(publishMessage.getMessage().getBytes());
-        mqttMessage.setQos(publishMessage.getQos());
-        mqttMessage.setRetained(publishMessage.getRetained());
+	public void subscribe(final String topic) throws MqttException {
+		System.out.println("Messages received:");
 
-        mqttClient.publish(publishMessage.getTopic(), mqttMessage);
+		mqttClient.subscribeWithResponse(topic, (tpic, msg) -> {
+			System.out.println(msg.getId() + " -> " + new String(msg.getPayload()));
+		});
+	}
 
-        mqttClient.disconnect();
-    }
+	public MqttSubscribeModel subscribeList(final String topic, final Integer waitMillis) throws MqttException, InterruptedException {
+		CountDownLatch countDownLatch = new CountDownLatch(10);
+		MqttSubscribeModel mqttSubscribeModel = new MqttSubscribeModel();
+		mqttClient.subscribe(topic, (s, mqttMessage) -> {
+			mqttSubscribeModel.setId(mqttMessage.getId());
+			mqttSubscribeModel.setMessage(new String(mqttMessage.getPayload()));
+			mqttSubscribeModel.setQos(mqttMessage.getQos());
+			messages.add(mqttSubscribeModel);
+			countDownLatch.countDown();
+		});
 
-    public void subscribe(final String topic) throws MqttException {
-        System.out.println("Messages received:");
+		countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
 
-        mqttClient.subscribeWithResponse(topic, (tpic, msg) -> {
-            System.out.println(msg.getId() + " -> " + new String(msg.getPayload()));
-        });
-    }
+		return mqttSubscribeModel;
+	}
 
-    public List<MqttSubscribeModel> subscribeList(final String topic, final Integer waitMillis) throws MqttException, InterruptedException {
-        List<MqttSubscribeModel> messages = new ArrayList<>();
-        CountDownLatch countDownLatch = new CountDownLatch(10);
-        mqttClient.subscribe(topic, (s, mqttMessage) -> {
-            MqttSubscribeModel mqttSubscribeModel = new MqttSubscribeModel();
-            mqttSubscribeModel.setId(mqttMessage.getId());
-            mqttSubscribeModel.setMessage(new String(mqttMessage.getPayload()));
-            mqttSubscribeModel.setQos(mqttMessage.getQos());
-            messages.add(mqttSubscribeModel);
-            countDownLatch.countDown();
-        });
-
-        countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
-
-        return messages;
-    }
+	public List<MqttSubscribeModel> showAllReceived() {
+		return messages;
+	}
 
 }
