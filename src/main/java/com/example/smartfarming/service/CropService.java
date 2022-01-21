@@ -81,7 +81,7 @@ public class CropService {
         ArrayList<CropDto> cropArrayList = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("src/main/resources/data/crop.json"))
+        try (FileReader reader = new FileReader("src/main/resources/Data/crop.json"))
         {
             Object obj = jsonParser.parse(reader);
             JSONArray cropList = (JSONArray) obj;
