@@ -1,13 +1,14 @@
 package com.example.smartfarming.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Id;
-import java.util.Date;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CropDto {
 
     String name;
@@ -15,14 +16,4 @@ public class CropDto {
     String leafColor;
     Long leafTemperature;
 
-    public CropDto(String name, Long height, String leafColor, Long leafTemperature) {
-        this.name = name;
-        this.height = height;
-        this.leafColor = leafColor;
-        this.leafTemperature = leafTemperature;
-    }
-
-    public CropDto() {
-
-    }
 }

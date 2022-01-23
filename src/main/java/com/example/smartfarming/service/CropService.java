@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class CropService {
     final CropRepository cropRepository;
     final MessagingService messagingService;
 
+    @PostConstruct
     public String saveCrops() throws MqttException {
         ArrayList<CropDto> crops = readCropsFromJson();
         for (CropDto cropDto : crops) {
