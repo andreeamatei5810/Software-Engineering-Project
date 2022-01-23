@@ -2,6 +2,7 @@ package com.example.smartfarming.service;
 
 import com.example.smartfarming.dto.PublishMessage;
 import com.example.smartfarming.dto.PublishSoil;
+import com.example.smartfarming.dto.SoilDto;
 import com.example.smartfarming.entity.Soil;
 import com.example.smartfarming.repository.SoilRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,5 +57,15 @@ public class SoilService {
 				.setRetained(true);
 		messagingService.publish(publishMessage);
 		return "Publicarea a fost cu succes!";
+	}
+
+	public List<SoilDto> findAll(){
+		List<SoilDto> soilDtos = new ArrayList<>();
+		soilRepository.findAll().forEach(soil -> {
+			SoilDto soilDto = new SoilDto();
+			BeanUtils.copyProperties(soil,soilDto);
+			soilDtos.add(soilDto);
+		});
+		return soilDtos;
 	}
 }
