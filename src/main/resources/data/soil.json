@@ -1,0 +1,29 @@
+[
+  {
+    "moisture": 30,
+    "ph": 7,
+    "residualNitrates": 20,
+    "nutrientLevels": 6,
+    "texture": "silty loam",
+    "density": 1.5,
+    "permeability": 7.2
+  },
+  {
+    "moisture": 45,
+    "ph": 6.7,
+    "residualNitrates": 18,
+    "nutrientLevels": 7.2,
+    "texture": "loam",
+    "density": 1.37,
+    "permeability": 11.3
+  },
+  {
+    "moisture": 23,
+    "ph": 6,
+    "residualNitrates": 8,
+    "nutrientLevels": 5.4,
+    "texture": "silty clay loam",
+    "density": 1.67,
+    "permeability": 11.9
+  }
+]
