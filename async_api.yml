@@ -1,0 +1,54 @@
+asyncapi: 2.0.0
+info:
+  title: Smart farming
+  version: '1.0.0'
+  description: AsyncAPI Specification
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  production:
+    url: 127.0.0.1:{port}
+    protocol: mqtt
+    description: Test broker
+    variables:
+        port:
+          default: '1883'
+          enum:
+            - '1883'
+            - '8883'
+
+channels:
+  /crop/addCrop:
+    publish:
+      operationId: addCrop
+      message:
+        $ref : '#/components/messages/CropPublish'
+
+components:
+  messages:
+    CropPublish:
+      name: cropPublish
+      title: CropPublish
+      summary: A crop was published
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/cropPublishPayload'
+
+  schemas:
+    cropPublishPayload:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "crop name"
+        height:
+          type: number
+          description: "crop height"
+        leafColor:
+          type: string
+          description: "crop leaf color"
+        leafTemperature:
+          type: number
+          description: "crop leaf temperature"
