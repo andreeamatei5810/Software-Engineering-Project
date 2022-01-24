@@ -4,11 +4,12 @@ package com.example.smartfarming.config;
 import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
-@Configuration
-public class MqttConfiguration {
+@org.springframework.context.annotation.Configuration
+public class Config {
 
     @Bean
     @ConfigurationProperties(prefix = "mqtt")
@@ -25,6 +26,11 @@ public class MqttConfiguration {
         mqttClient.connect(mqttConnectOptions());
 
         return mqttClient;
+    }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        return restTemplateBuilder.build();
     }
 
 }

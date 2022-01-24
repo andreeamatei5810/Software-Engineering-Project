@@ -1,5 +1,6 @@
 package com.example.smartfarming.controller;
 
+import com.example.smartfarming.dto.CurrentWeather;
 import com.example.smartfarming.dto.PublishWeather;
 import com.example.smartfarming.dto.WeatherDto;
 import com.example.smartfarming.service.WeatherService;
@@ -27,6 +28,10 @@ public class WeatherController {
         return weatherService.findAll();
     }
 
+    @GetMapping("/weather")
+    public CurrentWeather getWeather(@RequestParam String country, @RequestParam String city){
+        return weatherService.getWeather(country,city);
+    }
 
 
 
