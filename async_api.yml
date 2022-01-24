@@ -9,7 +9,7 @@ info:
 
 servers:
   production:
-    url: 127.0.0.1:{port}
+    url: localhost:{port}
     protocol: mqtt
     description: Test broker
     variables:
