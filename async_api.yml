@@ -17,14 +17,14 @@ channels:
     publish:
       operationId: addCrop
       message:
-        $ref : '#/components/crop/CropPublish'
+        $ref : '#/components/messages/CropPublish'
 
 components:
-  crop:
+  messages:
     CropPublish:
       name: cropPublish
       title: Crop Publish
-      summary: A crop is added in database and publish
+      summary:  A crop is added in database and publish
       contentType: application/json
       payload:
         $ref: '#/components/schemas/cropPublishPayload'
