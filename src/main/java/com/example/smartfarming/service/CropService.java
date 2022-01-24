@@ -62,17 +62,6 @@ public class CropService {
         return cropDtoArrayList;
     }
 
-    public CropDto showCrop(String name){
-        Optional<Crop> cropOptional = cropRepository.findByName(name);
-        if (cropOptional.isPresent()){
-            CropDto cropDto = new CropDto();
-            BeanUtils.copyProperties(cropOptional.get(), cropDto);
-            return cropDto;
-        }
-        return null;
-    }
-
-
     private void publishCrops(Crop crop) throws MqttException {
         String message = crop.toString();
         messagingService.publish("crop", message,0, true);

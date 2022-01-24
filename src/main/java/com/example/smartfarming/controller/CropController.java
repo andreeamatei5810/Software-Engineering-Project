@@ -30,16 +30,4 @@ public class CropController {
         return cropService.showCrops();
     }
 
-    @GetMapping("show/{name}")
-    public CropDto showCrop(@PathVariable String name){
-        return cropService.showCrop(name);
-    }
-
-    /*
-    @GetMapping("/add")
-    public ResponseEntity<String> saveCrops () throws MqttException {
-        return ResponseEntity.ok().body(cropService.saveCrops());
-    }
-    */
-
 }

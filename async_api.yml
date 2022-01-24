@@ -9,29 +9,22 @@ info:
 
 servers:
   production:
-    url: localhost:{port}
+    url: 127.0.0.1:8080
     protocol: mqtt
-    description: Test broker
-    variables:
-        port:
-          default: '1883'
-          enum:
-            - '1883'
-            - '8883'
 
 channels:
   /crop/addCrop:
     publish:
       operationId: addCrop
       message:
-        $ref : '#/components/messages/CropPublish'
+        $ref : '#/components/crop/CropPublish'
 
 components:
-  messages:
+  crop:
     CropPublish:
       name: cropPublish
-      title: CropPublish
-      summary: A crop was published
+      title: Crop Publish
+      summary: A crop is added in database and publish
       contentType: application/json
       payload:
         $ref: '#/components/schemas/cropPublishPayload'
