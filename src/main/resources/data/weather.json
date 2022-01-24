@@ -1,0 +1,20 @@
+[
+  {
+    "infoMessage": "Sunny",
+    "temperature": 27,
+    "humidity": 5,
+    "wind": 2
+  },
+  {
+    "infoMessage": "Mostly Cloudy",
+    "temperature": 0,
+    "humidity": 9,
+    "wind": 10
+  },
+  {
+    "infoMessage": "Snow",
+    "temperature": -5,
+    "humidity": 25,
+    "wind": 30
+  }
+]

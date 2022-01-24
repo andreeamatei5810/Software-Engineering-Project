@@ -48,6 +48,7 @@ public class SoilService {
 	public String publish(PublishSoil soilDto) throws MqttException {
 		Soil soil = new Soil()
 				.setId(UUID.randomUUID().toString())
+				.setId(UUID.randomUUID().toString())
 				.setTimeStamp(LocalDateTime.now());
 		BeanUtils.copyProperties(soilDto, soil);
 		PublishMessage publishMessage = new PublishMessage()
