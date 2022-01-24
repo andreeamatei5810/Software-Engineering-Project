@@ -15,33 +15,26 @@ servers:
 channels:
   /crop/addCrop:
     publish:
-      operationId: addCrop
-      message:
-        $ref : '#/components/messages/CropPublish'
+        message:
+          $ref: '#/components/messages/AddCrop'
 
 components:
-  messages:
-    CropPublish:
-      name: cropPublish
-      title: Crop Publish
-      summary:  A crop is added in database and publish
-      contentType: application/json
-      payload:
-        $ref: '#/components/schemas/cropPublishPayload'
-
-  schemas:
-    cropPublishPayload:
-      type: object
-      properties:
-        name:
-          type: string
-          description: "crop name"
-        height:
-          type: number
-          description: "crop height"
-        leafColor:
-          type: string
-          description: "crop leaf color"
-        leafTemperature:
-          type: number
-          description: "crop leaf temperature"
+    messages:
+      AddCrop:
+        title: Add crop
+        summary: A crop is added in database and publish
+        payload:
+          type: object
+          properties:
+            name:
+              type: string
+              description: "crop name"
+            height:
+              type: number
+              description: "crop height"
+            leafColor:
+              type: string
+              description: "crop leaf color"
+            leafTemperature:
+              type: number
+              description: "crop leaf temperature"
