@@ -8,12 +8,4 @@ services:
       - POSTGRES_DB=smart-farming
       - POSTGRES_USER=smart-farming
       - POSTGRES_PASSWORD=smart-farming
-  postgres-test:
-    image: postgres
-    ports:
-      - 5433:5432
-    environment:
-      - POSTGRES_DB=smart-farming-test
-      - POSTGRES_USER=smart-farming
-      - POSTGRES_PASSWORD=smart-farming
 
