@@ -2,6 +2,9 @@ package com.example.smartfarming.service;
 
 import com.example.smartfarming.dto.MqttSubscribeModel;
 import com.example.smartfarming.dto.PublishMessage;
+import com.example.smartfarming.entity.Soil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -14,11 +17,24 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class MessagingService {
 
 	@Autowired
 	private IMqttClient mqttClient;
 	List<MqttSubscribeModel> messages = new ArrayList<>();
+	List<Soil> soilMessages = new ArrayList<>();
+
+	public void subscribeSoil(final Integer waitMillis) throws MqttException, InterruptedException {
+		CountDownLatch countDownLatch = new CountDownLatch(10);
+		ObjectMapper mapper = new ObjectMapper();
+		mqttClient.subscribe("/soil", (s, mqttMessage) -> {
+			soilMessages.add(mapper.readValue(mqttMessage.getPayload(), Soil.class));
+			countDownLatch.countDown();
+		});
+		countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
+	}
+
 
 	public void publish(final String topic, final String payload, int qos, boolean retained)
 			throws MqttException {
@@ -43,9 +59,7 @@ public class MessagingService {
 	public void subscribe(final String topic) throws MqttException {
 		System.out.println("Messages received:");
 
-		mqttClient.subscribeWithResponse(topic, (tpic, msg) -> {
-			System.out.println(msg.getId() + " -> " + new String(msg.getPayload()));
-		});
+		mqttClient.subscribeWithResponse(topic, (tpic, msg) -> System.out.println(msg.getId() + " -> " + new String(msg.getPayload())));
 	}
 
 	public MqttSubscribeModel subscribeList(final String topic, final Integer waitMillis) throws MqttException, InterruptedException {
@@ -68,5 +82,11 @@ public class MessagingService {
 	public List<MqttSubscribeModel> showAllReceived() {
 		return messages;
 	}
+
+	public List<Soil> getSoils() {
+		return soilMessages;
+	}
+
+
 
 }

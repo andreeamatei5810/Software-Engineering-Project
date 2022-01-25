@@ -27,6 +27,7 @@ public class SoilService {
 
 	final SoilRepository soilRepository;
 	final MessagingService messagingService;
+	final IrrigationService irrigationService;
 
 	@PostConstruct
 	public void initializeDatabase() throws IOException {
@@ -44,16 +45,16 @@ public class SoilService {
 		}
 	}
 
-
-	public String publish(PublishSoil soilDto) throws MqttException {
+	public String publish(PublishSoil soilDto) throws MqttException, IOException {
 		Soil soil = new Soil()
-				.setId(UUID.randomUUID().toString())
 				.setId(UUID.randomUUID().toString())
 				.setTimeStamp(LocalDateTime.now());
 		BeanUtils.copyProperties(soilDto, soil);
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonSoil = mapper.writeValueAsString(soil);
 		PublishMessage publishMessage = new PublishMessage()
 				.setTopic("/soil")
-				.setMessage(soil.toString())
+				.setMessage(jsonSoil)
 				.setQos(0)
 				.setRetained(true);
 		messagingService.publish(publishMessage);

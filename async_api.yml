@@ -13,28 +13,97 @@ servers:
     protocol: mqtt
 
 channels:
-  /crop/addCrop:
+  crop:
     publish:
         message:
-          $ref: '#/components/messages/AddCrop'
+          $ref: '#/components/messages/PublishCrop'
+  /soil:
+    publish:
+      message:
+        $ref: '#/components/messages/PublishSoil'
+    subscribe:
+        message:
+            $ref: '#/components/messages/SubscribeSoil'
 
 components:
     messages:
-      AddCrop:
-        title: Add crop
-        summary: A crop is added in database and publish
+      PublishCrop:
+        title: Publish crop
+        summary: Each time a new crop is added, a message with the contents of the crop is published.
         payload:
           type: object
           properties:
             name:
               type: string
-              description: "crop name"
+              description: "Crop name"
             height:
               type: number
-              description: "crop height"
+              description: "The height of the plants in the crop"
             leafColor:
               type: string
-              description: "crop leaf color"
+              description: "Crop leaf color"
             leafTemperature:
               type: number
-              description: "crop leaf temperature"
+              description: "Crop leaf temperature"
+      PublishSoil:
+        title: Publish soil
+        summary: Each time a new soil is added, a message with the contents of the soil is published.
+        payload:
+          type: application/json
+          properties:
+            id:
+              type: string
+              description: "Soil id"
+            timeStamp:
+              type: string
+              format: date-time
+              description: "The date the soil information was taken over"
+            moisture:
+                type: integer
+                description: "Soil moisture"
+            pH:
+                type: number
+                description: "Soil pH"
+            nutrientLevels:
+                type: number
+                description: "Soil nutrient levels"
+            texture:
+                type: string
+                description: "Soil texture"
+            density:
+                type: number
+                description: "Soil density"
+            permeability:
+                type: number
+                description: "Soil permeability"
+      SubscribeSoil:
+        title: Subscribe soil
+        summary: To start the irrigation system, the subscribe to topic /soil is used to take information about the soil.
+        payload:
+          type: application/json
+          properties:
+            id:
+              type: string
+              description: "Soil id"
+            timeStamp:
+              type: string
+              format: date-time
+              description: "The date the soil information was taken over"
+            moisture:
+              type: integer
+              description: "Soil moisture"
+            pH:
+              type: number
+              description: "Soil pH"
+            nutrientLevels:
+              type: number
+              description: "Soil nutrient levels"
+            texture:
+              type: string
+              description: "Soil texture"
+            density:
+              type: number
+              description: "Soil density"
+            permeability:
+              type: number
+              description: "Soil permeability"
