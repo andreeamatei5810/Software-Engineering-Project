@@ -47,9 +47,9 @@ components:
               description: "Crop leaf temperature"
       PublishSoil:
         title: Publish soil
-        summary: Each time a new soil is added, a message with the contents of the soil is published.
+        summary: Each time a new soil is added, a json with the contents of the soil is published.
         payload:
-          type: application/json
+          type: string
           properties:
             id:
               type: string
@@ -80,7 +80,7 @@ components:
         title: Subscribe soil
         summary: To start the irrigation system, the subscribe to topic /soil is used to take information about the soil.
         payload:
-          type: application/json
+          type: string
           properties:
             id:
               type: string
