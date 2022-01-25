@@ -50,8 +50,9 @@ public class MessagingService {
 
 	public MqttSubscribeModel subscribeList(final String topic, final Integer waitMillis) throws MqttException, InterruptedException {
 		CountDownLatch countDownLatch = new CountDownLatch(10);
-		MqttSubscribeModel mqttSubscribeModel = new MqttSubscribeModel();
+		MqttSubscribeModel mqttSubscribeModelOut;
 		mqttClient.subscribe(topic, (s, mqttMessage) -> {
+			MqttSubscribeModel mqttSubscribeModel = new MqttSubscribeModel();
 			mqttSubscribeModel.setId(mqttMessage.getId());
 			mqttSubscribeModel.setMessage(new String(mqttMessage.getPayload()));
 			mqttSubscribeModel.setQos(mqttMessage.getQos());
@@ -61,7 +62,7 @@ public class MessagingService {
 
 		countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
 
-		return mqttSubscribeModel;
+		return null;
 	}
 
 	public List<MqttSubscribeModel> showAllReceived() {
