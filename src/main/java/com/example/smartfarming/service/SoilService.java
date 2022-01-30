@@ -64,8 +64,7 @@ public class SoilService {
 	public List<SoilDto> findAll(){
 		List<SoilDto> soilDtos = new ArrayList<>();
 		soilRepository.findAll().forEach(soil -> {
-			SoilDto soilDto = new SoilDto();
-			BeanUtils.copyProperties(soil,soilDto);
+			SoilDto soilDto = new SoilDto(soil);
 			soilDtos.add(soilDto);
 		});
 		return soilDtos;

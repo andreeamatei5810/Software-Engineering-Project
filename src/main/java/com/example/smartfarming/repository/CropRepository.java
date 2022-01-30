@@ -7,5 +7,7 @@ import java.util.Optional;
 
 public interface CropRepository extends JpaRepository<Crop,String> {
     Optional<Crop> findByName(String name);
+   // List<Crop> findAllByTimeStampAfter(LocalDateTime localDateTime);
+
 
 }
