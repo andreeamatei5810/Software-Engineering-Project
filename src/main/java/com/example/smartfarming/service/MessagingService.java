@@ -3,6 +3,7 @@ package com.example.smartfarming.service;
 import com.example.smartfarming.dto.MqttSubscribeModel;
 import com.example.smartfarming.dto.PublishMessage;
 import com.example.smartfarming.entity.Soil;
+import com.example.smartfarming.repository.SoilRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
@@ -24,12 +25,16 @@ public class MessagingService {
 	private IMqttClient mqttClient;
 	List<MqttSubscribeModel> messages = new ArrayList<>();
 	List<Soil> soilMessages = new ArrayList<>();
+	final SoilRepository soilRepository;
+
 
 	public void subscribeSoil(final Integer waitMillis) throws MqttException, InterruptedException {
 		CountDownLatch countDownLatch = new CountDownLatch(10);
 		ObjectMapper mapper = new ObjectMapper();
 		mqttClient.subscribe("/soil", (s, mqttMessage) -> {
-			soilMessages.add(mapper.readValue(mqttMessage.getPayload(), Soil.class));
+			Soil soil = mapper.readValue(mqttMessage.getPayload(), Soil.class);
+			soilMessages.add(soil);
+			soilRepository.save(soil);
 			countDownLatch.countDown();
 		});
 		countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
