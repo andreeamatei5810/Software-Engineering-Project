@@ -27,11 +27,9 @@ class CropServiceTest {
 
     @Test
     void testSaveCrops() throws Exception {
-
-        String message = cropService.saveCrops();
-        Assertions.assertEquals("The data has been retrieved.", message);
+        cropService.saveCrops();
+        Assertions.assertFalse(cropRepository.findAll().isEmpty());
     }
-
 
     @Test
     void testSaveCrop() throws Exception {

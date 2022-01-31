@@ -27,8 +27,8 @@ public class CropControllerTest {
 
     @Test
     void testSaveCrops() throws Exception {
-        ResponseEntity<String> response = cropController.saveCrops(new CropDto());
-        //Assertions.assertEquals("The data has been retrieved.", response.getBody());
+        ResponseEntity<String> response = cropController.saveCrop(new CropDto());
+        Assertions.assertEquals("Crop is saved.", response.getBody());
         Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
