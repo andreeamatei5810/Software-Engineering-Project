@@ -1,0 +1,41 @@
+openapi: 3.0.1
+info:
+  title: defaultTitle
+  description: defaultDescription
+  version: '0.1'
+servers:
+  - url: http://localhost:8080
+paths:
+  /soil:
+    post:
+      description: Auto generated using Swagger Inspector
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                density:
+                  type: integer
+                texture:
+                  type: string
+                permeability:
+                  type: integer
+                ph:
+                  type: integer
+                nutrientLevels:
+                  type: integer
+                moisture:
+                  type: integer
+                residualNitrates:
+                  type: integer
+            examples:
+              '0':
+                value: "{\r\n  \"moisture\": 4,\r\n  \"residualNitrates\": 5,\r\n  \"nutrientLevels\": 1,\r\n  \"texture\": \"nisip\",\r\n  \"density\": 3,\r\n  \"permeability\": 1,\r\n  \"ph\": 2\r\n}"
+      responses:
+        default:
+          description: Auto generated using Swagger Inspector
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
