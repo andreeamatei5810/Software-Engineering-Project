@@ -50,8 +50,7 @@ class CropServiceTest {
 
     @Test
     void testReadCropsFromJson() throws Exception {
-        Crop crop = new Crop().setId(UUID.randomUUID().toString());
-        cropRepository.save(crop);
+
         List<CropDto> list = cropService.readCropsFromJson();
         Assertions.assertFalse(list.isEmpty());
     }
