@@ -67,7 +67,7 @@ public class CropService {
         messagingService.publish("crop", message,0, true);
     }
 
-    private ArrayList<CropDto> readCropsFromJson() {
+    public ArrayList<CropDto> readCropsFromJson() {
 
         ArrayList<CropDto> cropArrayList = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
