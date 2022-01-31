@@ -21,7 +21,7 @@ public class CropController {
     final CropService cropService;
 
     @PostMapping("/addCrop")
-    public ResponseEntity<String> saveCrops (@RequestBody CropDto cropDto) throws MqttException {
+    public ResponseEntity<String> saveCrop (@RequestBody CropDto cropDto) throws MqttException {
         return ResponseEntity.ok().body(cropService.saveCrop(cropDto));
     }
 

@@ -43,10 +43,10 @@ class CropIntegrationTest {
     }
 
     @Test
-    void testSaveCrops() throws Exception {
+    void testSaveCrop() throws Exception {
         CropDto cropDto = new CropDto();
 
-        mockMvc.perform(post("/addCrop")
+        mockMvc.perform(post("/crop/addCrop")
                         .content(objectMapper.writeValueAsString(cropDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
@@ -56,7 +56,7 @@ class CropIntegrationTest {
     void testShowCrops() throws Exception {
         cropRepository.save(new Crop().setId(UUID.randomUUID().toString()));
 
-        mockMvc.perform(get("/showCrops"))
+        mockMvc.perform(get("/crop/showCrops"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(not(empty()))));
 

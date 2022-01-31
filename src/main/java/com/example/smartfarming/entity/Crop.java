@@ -15,7 +15,6 @@ public class Crop {
 
     @Id
     String id;
-    @Column(unique = true)
     String name;
     Long height ;
     String leafColor;
