@@ -14,6 +14,7 @@ public class Notification {
 
     @Id
     String id;
+    String clientId;
     String message;
     LocalDateTime timeStamp;
     Boolean read;

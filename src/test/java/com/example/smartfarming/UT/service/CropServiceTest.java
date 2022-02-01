@@ -34,8 +34,8 @@ class CropServiceTest {
     @Test
     void testSaveCrop() throws Exception {
         CropDto cropDto = new CropDto();
-        String message = cropService.saveCrop(cropDto);
-        Assertions.assertEquals("Crop is saved.", message);
+        String message = cropService.saveCrop("123", cropDto);
+        Assertions.assertEquals("Publishing successfully!", message);
     }
 
     @Test

@@ -6,6 +6,8 @@ import com.example.smartfarming.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/notification")
 @RequiredArgsConstructor
@@ -13,14 +15,9 @@ public class NotificationController {
 
     final NotificationService notificationService;
 
-    @PostMapping("/checkWeather")
-    public NotificationDto getWeather(@RequestParam String country, @RequestParam String city){
-        return notificationService.sendNotifications(country,city);
-    }
-
     @GetMapping
-    public NotificationsListDto getAllNotifications(){
-        return notificationService.getAllNotifications();
+    public NotificationsListDto getAllNotifications(Principal principal){
+        return notificationService.getAllNotifications(principal.getName());
     }
 
 }

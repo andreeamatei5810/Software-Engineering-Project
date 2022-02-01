@@ -33,8 +33,8 @@ class WeatherServiceTest {
     @Test
     void testPublish() throws Exception {
         PublishWeather publishSoil = new PublishWeather();
-        String message = weatherService.publish(publishSoil);
-        Assertions.assertEquals("Publicarea a fost cu succes!", message);
+        String message = weatherService.publish("123",publishSoil);
+        Assertions.assertEquals("Publishing successfully!", message);
     }
 
     @Test

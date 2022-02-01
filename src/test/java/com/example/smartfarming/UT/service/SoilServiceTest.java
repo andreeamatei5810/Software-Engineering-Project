@@ -34,7 +34,7 @@ class SoilServiceTest {
 	void testPublish() throws Exception {
 		PublishSoil publishSoil = new PublishSoil();
 		String message = soilService.publish("123", publishSoil);
-		Assertions.assertEquals("Publicarea a fost cu succes!", message);
+		Assertions.assertEquals("Publishing successfully!", message);
 	}
 
 	@Test

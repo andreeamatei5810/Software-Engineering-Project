@@ -16,6 +16,7 @@ public class SensorService {
         sensorRepository.save(new Sensor()
                 .setId(UUID.randomUUID().toString())
                 .setClientId(clientId));
-        return "Sensor was added ith success!";
+
+        return "Sensor was added with success!";
     }
 }

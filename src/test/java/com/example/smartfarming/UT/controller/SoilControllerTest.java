@@ -28,7 +28,7 @@ public class SoilControllerTest {
 	@Test
 	void testPublish() throws Exception {
 		ResponseEntity<String> response = soilController.publish("123",new PublishSoil());
-		Assertions.assertEquals("Publicarea a fost cu succes!", response.getBody());
+		Assertions.assertEquals("Publishing successfully!", response.getBody());
 		Assertions.assertEquals(200, response.getStatusCodeValue());
 	}
 

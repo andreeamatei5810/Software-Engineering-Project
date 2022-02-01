@@ -74,7 +74,7 @@ public class WeatherService {
                 .setQos(0)
                 .setRetained(true);
         messagingService.publish(publishMessage);
-        return "Publicarea a fost cu succes!";
+        return "Publishing successfully!";
     }
 
     public List<WeatherDto> findAll() {

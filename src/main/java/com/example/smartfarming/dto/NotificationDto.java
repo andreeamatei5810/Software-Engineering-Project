@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class NotificationDto {
 
+    String clientId;
     String message;
     LocalDateTime timeStamp;
     Boolean read;

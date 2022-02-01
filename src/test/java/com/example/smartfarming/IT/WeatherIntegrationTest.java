@@ -45,9 +45,10 @@ class WeatherIntegrationTest {
     @Test
     void testPublish() throws Exception {
         PublishWeather publishWeather = new PublishWeather();
-
-        mockMvc.perform(post("/weather")
+        String sensorId = UUID.randomUUID().toString();
+        mockMvc.perform(post("/weather/" + sensorId)
                         .content(objectMapper.writeValueAsString(publishWeather))
+                        .param("sensorId", sensorId)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     }

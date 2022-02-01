@@ -61,7 +61,7 @@ public class SoilService {
 				.setRetained(true);
 		messagingService.publish(publishMessage);
 		soilRepository.save(soil);
-		return "Publicarea a fost cu succes!";
+		return "Publishing successfully!";
 	}
 
 	public List<SoilDto> findAll(){
