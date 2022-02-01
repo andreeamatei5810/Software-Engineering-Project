@@ -87,6 +87,16 @@ public class WeatherService {
         return weatherDtos;
     }
 
+    public List<WeatherDto> findAllUser(String email) {
+        List<WeatherDto> weatherDtos = new ArrayList<>();
+        weatherRepository.findAllByEmail(email).forEach(soil -> {
+            WeatherDto weatherDto = new WeatherDto();
+            BeanUtils.copyProperties(soil, weatherDto);
+            weatherDtos.add(weatherDto);
+        });
+        return weatherDtos;
+    }
+
     public CurrentWeather getWeather(String email) {
         Client client = clientRepository.findByEmail(email).get();
         URI url = new UriTemplate(WEATHER_URL).expand(client.getCity(), client.getCountry(), apiKey);
