@@ -29,7 +29,12 @@ public class WeatherController {
         return weatherService.findAll();
     }
 
-    @GetMapping("/weather")
+    @GetMapping("/user")
+    public List<WeatherDto> findAllUser(Principal principal){
+        return weatherService.findAllUser(principal.getName());
+    }
+
+    @GetMapping("/current")
     public CurrentWeather getWeather(Principal principal){
         return weatherService.getWeather(principal.getName());
     }

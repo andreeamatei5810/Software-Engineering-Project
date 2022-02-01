@@ -20,10 +20,10 @@ public class HomeService {
     final SoilRepository soilRepository;
     final CropRepository cropRepository;
 
-    public HomeDto getReport(LocalDate date) {
+    public HomeDto getReport(LocalDate date, String email) {
 
-        List<SoilDto> soilDtos = soilRepository.findAllByTimeStampAfter(date.atStartOfDay()).stream().map(SoilDto::new).collect(Collectors.toList());
-        List<CropDto> cropDtos = cropRepository.findAll().stream().map(CropDto::new).collect(Collectors.toList());
+        List<SoilDto> soilDtos = soilRepository.findAllByTimeStampAndEmail(date.atStartOfDay(), email).stream().map(SoilDto::new).collect(Collectors.toList());
+        List<CropDto> cropDtos = cropRepository.findAllByTimeStampAndEmail(date.atStartOfDay(), email).stream().map(CropDto::new).collect(Collectors.toList());
         Double averageLeafTemp = cropDtos.stream().map(CropDto::getLeafTemperature).mapToLong(Long::longValue).average().orElseThrow();
         Double averageSoilMoisture = soilDtos.stream().map(SoilDto::getMoisture).mapToInt(Integer::intValue).average().orElseThrow();
         Double percentageNitratesNormal = soilDtos.stream()
