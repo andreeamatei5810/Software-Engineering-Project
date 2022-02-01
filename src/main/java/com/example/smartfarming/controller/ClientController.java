@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/client")
 @RequiredArgsConstructor
@@ -19,6 +21,11 @@ public class ClientController {
 	@PostMapping("/register")
 	public ResponseEntity<String> register (@RequestBody ClientRegister clientRegister){
 		return ResponseEntity.ok().body(clientService.register(clientRegister));
+	}
+
+	@PostMapping("/name")
+	public ResponseEntity<String> name (Principal principal){
+		return ResponseEntity.ok().body(principal.getName());
 	}
 
 }

@@ -13,6 +13,7 @@ public class Weather {
     @Id
     String id;
     LocalDateTime timeStamp;
+    String sensorId;
     String infoMessage;
     Integer temperature;
     Integer humidity;
