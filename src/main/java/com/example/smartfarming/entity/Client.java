@@ -18,5 +18,7 @@ public class Client {
 	String email;
 	String password;
 	String name;
+	String country;
+	String city;
 
 }

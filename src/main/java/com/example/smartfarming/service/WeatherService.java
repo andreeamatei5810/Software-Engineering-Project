@@ -4,7 +4,9 @@ import com.example.smartfarming.dto.CurrentWeather;
 import com.example.smartfarming.dto.PublishMessage;
 import com.example.smartfarming.dto.PublishWeather;
 import com.example.smartfarming.dto.WeatherDto;
+import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.entity.Weather;
+import com.example.smartfarming.repository.ClientRepository;
 import com.example.smartfarming.repository.WeatherRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -38,6 +40,7 @@ public class WeatherService {
     @Value("${api.weather.key}")
     private String apiKey;
     final WeatherRepository weatherRepository;
+    final ClientRepository clientRepository;
     final MessagingService messagingService;
     @Autowired
     final RestTemplate restTemplate;
@@ -84,8 +87,9 @@ public class WeatherService {
         return weatherDtos;
     }
 
-    public CurrentWeather getWeather(String country, String city) {
-        URI url = new UriTemplate(WEATHER_URL).expand(city, country, apiKey);
+    public CurrentWeather getWeather(String email) {
+        Client client = clientRepository.findByEmail(email).get();
+        URI url = new UriTemplate(WEATHER_URL).expand(client.getCity(), client.getCountry(), apiKey);
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         try {
