@@ -5,6 +5,7 @@ import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,8 +22,10 @@ public class ClientService {
 		if (clientOptional.isPresent()){
 			return "Exista un cont cu mail-ul asta";
 		} else if(clientRegister.getPassword().equals(clientRegister.getPasswordCheck())) {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			Client client = new Client();
 			BeanUtils.copyProperties(clientRegister,client);
+			client.setPassword(encoder.encode(client.getPassword()));
 			client.setId(UUID.randomUUID().toString());
 			clientRepository.save(client);
 			return "V-ati inregistrat cu succes";

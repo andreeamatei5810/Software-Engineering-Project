@@ -77,16 +77,6 @@ public class WeatherService {
         return "Publishing successfully!";
     }
 
-    public List<WeatherDto> findAll() {
-        List<WeatherDto> weatherDtos = new ArrayList<>();
-        weatherRepository.findAll().forEach(soil -> {
-            WeatherDto weatherDto = new WeatherDto();
-            BeanUtils.copyProperties(soil, weatherDto);
-            weatherDtos.add(weatherDto);
-        });
-        return weatherDtos;
-    }
-
     public List<WeatherDto> findAllUser(String email) {
         List<WeatherDto> weatherDtos = new ArrayList<>();
         weatherRepository.findAllByEmail(email).forEach(soil -> {

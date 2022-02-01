@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
+                .antMatchers("/client/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

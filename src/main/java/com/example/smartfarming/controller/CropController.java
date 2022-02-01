@@ -22,11 +22,6 @@ public class CropController {
         return ResponseEntity.ok().body(cropService.saveCrop(sensorId, cropDto));
     }
 
-    @GetMapping("/showCrops")
-    public List<CropDto> showCrops() {
-        return cropService.showCrops();
-    }
-
     @GetMapping("/showCropsUser")
     public List<CropDto> showCropsUser(Principal principal) {
         return cropService.showCropsUser(principal.getName());

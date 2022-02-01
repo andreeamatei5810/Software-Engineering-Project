@@ -23,9 +23,4 @@ public class ClientController {
 		return ResponseEntity.ok().body(clientService.register(clientRegister));
 	}
 
-	@PostMapping("/name")
-	public ResponseEntity<String> name (Principal principal){
-		return ResponseEntity.ok().body(principal.getName());
-	}
-
 }
