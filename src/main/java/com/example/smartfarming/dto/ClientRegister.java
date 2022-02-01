@@ -11,5 +11,7 @@ public class ClientRegister {
 	String password;
 	String passwordCheck;
 	String name;
+	String city;
+	String country;
 
 }

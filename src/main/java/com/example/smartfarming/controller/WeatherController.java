@@ -24,11 +24,6 @@ public class WeatherController {
         return ResponseEntity.ok().body(weatherService.publish(sensorId,weatherDto));
     }
 
-    @GetMapping
-    public List<WeatherDto> findAll(){
-        return weatherService.findAll();
-    }
-
     @GetMapping("/user")
     public List<WeatherDto> findAllUser(Principal principal){
         return weatherService.findAllUser(principal.getName());

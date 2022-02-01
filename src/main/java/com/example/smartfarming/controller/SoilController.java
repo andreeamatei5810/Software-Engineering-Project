@@ -24,11 +24,6 @@ public class SoilController {
 		return ResponseEntity.ok().body(soilService.publish(sensorId, soilDto));
 	}
 
-	@GetMapping
-	public List<SoilDto> findAll(){
-		return soilService.findAll();
-	}
-
 	@GetMapping("/user")
 	public List<SoilDto> findAllUser(Principal principal){
 		return soilService.findAllUser(principal.getName());

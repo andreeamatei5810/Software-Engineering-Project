@@ -52,19 +52,6 @@ public class CropService {
         return "Crop couldn't be saved.";
     }
 
-    public List<CropDto> showCrops() {
-        List<CropDto> cropDtoArrayList = new ArrayList<>();
-        List<Crop> cropArrayList = cropRepository.findAll();
-
-        for (Crop crop : cropArrayList) {
-            CropDto cropDto = new CropDto();
-            BeanUtils.copyProperties(crop, cropDto);
-            cropDtoArrayList.add(cropDto);
-        }
-
-        return cropDtoArrayList;
-    }
-
     public List<CropDto> showCropsUser(String email) {
         List<CropDto> cropDtoArrayList = new ArrayList<>();
         List<Crop> cropArrayList = cropRepository.findAllByEmail(email);

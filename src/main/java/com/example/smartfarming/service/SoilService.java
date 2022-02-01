@@ -64,15 +64,6 @@ public class SoilService {
 		return "Publicarea a fost cu succes!";
 	}
 
-	public List<SoilDto> findAll(){
-		List<SoilDto> soilDtos = new ArrayList<>();
-		soilRepository.findAll().forEach(soil -> {
-			SoilDto soilDto = new SoilDto(soil);
-			soilDtos.add(soilDto);
-		});
-		return soilDtos;
-	}
-
 	public List<SoilDto> findAllUser(String email){
 		List<SoilDto> soilDtos = new ArrayList<>();
 		soilRepository.findAllByEmail(email).forEach(soil -> {
