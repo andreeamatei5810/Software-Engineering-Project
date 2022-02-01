@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -29,8 +30,8 @@ public class WeatherController {
     }
 
     @GetMapping("/weather")
-    public CurrentWeather getWeather(@RequestParam String country, @RequestParam String city){
-        return weatherService.getWeather(country,city);
+    public CurrentWeather getWeather(Principal principal){
+        return weatherService.getWeather(principal.getName());
     }
 
 
