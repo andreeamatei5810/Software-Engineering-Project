@@ -31,7 +31,7 @@ public class IrrigationService {
         List<Soil> soilList = messagingService.getSoils();
         System.out.println("powerOn");
         for (Soil soil : soilList) {
-            if (soil.getMoisture() < 20) {
+            if (soil.getMoisture() != null && soil.getMoisture() < 20) {
                 IrrigationSystem irrigationSystem = new IrrigationSystem();
                 irrigationSystem.setId(UUID.randomUUID().toString()).setPower(true)
                         .setTimeStamp(LocalDateTime.now()).setWaterAmount(20 - soil.getMoisture()).setSoil(soil);
@@ -50,7 +50,7 @@ public class IrrigationService {
         List<Soil> soilList = messagingService.getSoils();
         System.out.println("powerOff");
         for (Soil soil : soilList) {
-            if (soil.getMoisture() > 20) {
+            if (soil.getMoisture() != null && soil.getMoisture() > 20) {
                 IrrigationSystem irrigationSystem = new IrrigationSystem();
                 irrigationSystem.setId(UUID.randomUUID().toString()).setPower(false)
                         .setTimeStamp(LocalDateTime.now()).setSoil(soil);

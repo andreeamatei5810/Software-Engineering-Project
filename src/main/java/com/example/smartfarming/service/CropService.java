@@ -17,7 +17,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,25 +27,20 @@ public class CropService {
     final MessagingService messagingService;
 
     @PostConstruct
-    public String saveCrops() throws MqttException {
+    public void saveCrops() throws MqttException {
         ArrayList<CropDto> crops = readCropsFromJson();
         for (CropDto cropDto : crops) {
             saveCrop(cropDto);
         }
-        return "The data has been retrieved.";
     }
 
     public String saveCrop(CropDto cropDto) throws MqttException{
-        Optional<Crop> cropOptional = cropRepository.findByName(cropDto.getName());
-        if (cropOptional.isEmpty()){
-            Crop crop = new Crop();
-            BeanUtils.copyProperties(cropDto, crop);
-            crop.setId(UUID.randomUUID().toString());
-            cropRepository.save(crop);
-            publishCrops(crop);
-            return "Crop is saved.";
-        }
-        return "Crop couldn't be saved.";
+        Crop crop = new Crop();
+        BeanUtils.copyProperties(cropDto, crop);
+        crop.setId(UUID.randomUUID().toString());
+        cropRepository.save(crop);
+        publishCrops(crop);
+        return "Crop is saved.";
     }
 
     public  List<CropDto> showCrops(){
@@ -67,7 +61,7 @@ public class CropService {
         messagingService.publish("crop", message,0, true);
     }
 
-    private ArrayList<CropDto> readCropsFromJson() {
+    public ArrayList<CropDto> readCropsFromJson() {
 
         ArrayList<CropDto> cropArrayList = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
