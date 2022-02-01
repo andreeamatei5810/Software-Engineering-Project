@@ -16,5 +16,6 @@ public class Notification {
     String id;
     String message;
     LocalDateTime timeStamp;
+    Boolean read;
 
 }

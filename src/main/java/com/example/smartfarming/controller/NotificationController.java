@@ -1,11 +1,10 @@
 package com.example.smartfarming.controller;
 
 import com.example.smartfarming.dto.NotificationDto;
+import com.example.smartfarming.dto.NotificationsListDto;
 import com.example.smartfarming.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/notification")
@@ -20,7 +19,7 @@ public class NotificationController {
     }
 
     @GetMapping
-    public List<NotificationDto> getAllNotifications(){
+    public NotificationsListDto getAllNotifications(){
         return notificationService.getAllNotifications();
     }
 

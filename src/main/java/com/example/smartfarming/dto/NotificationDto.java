@@ -11,4 +11,6 @@ public class NotificationDto {
 
     String message;
     LocalDateTime timeStamp;
+    Boolean read;
+
 }
