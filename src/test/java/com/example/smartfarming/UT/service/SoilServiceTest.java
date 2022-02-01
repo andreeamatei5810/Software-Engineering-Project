@@ -37,6 +37,7 @@ class SoilServiceTest {
 		Assertions.assertEquals("Publishing successfully!", message);
 	}
 
+	/*
 	@Test
 	void testFindAll() throws Exception {
 		Soil soil = new Soil().setId(UUID.randomUUID().toString());
@@ -44,5 +45,5 @@ class SoilServiceTest {
 		List<SoilDto> list = soilService.findAll();
 		Assertions.assertFalse(list.isEmpty());
 	}
-
+	*/
 }

@@ -37,6 +37,7 @@ class WeatherServiceTest {
         Assertions.assertEquals("Publishing successfully!", message);
     }
 
+    /*
     @Test
     void testFindAll() throws Exception {
         Weather weather = new Weather().setId(UUID.randomUUID().toString());
@@ -44,5 +45,5 @@ class WeatherServiceTest {
         List<WeatherDto> list = weatherService.findAll();
         Assertions.assertFalse(list.isEmpty());
     }
-
+*/
 }

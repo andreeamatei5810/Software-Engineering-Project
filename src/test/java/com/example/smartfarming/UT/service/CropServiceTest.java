@@ -38,6 +38,7 @@ class CropServiceTest {
         Assertions.assertEquals("Publishing successfully!", message);
     }
 
+    /*
     @Test
     void testShowCrops() throws Exception {
         Crop crop = new Crop().setId(UUID.randomUUID().toString());
@@ -45,6 +46,7 @@ class CropServiceTest {
         List<CropDto> list = cropService.showCrops();
         Assertions.assertFalse(list.isEmpty());
     }
+    */
 
     @Test
     void testReadCropsFromJson() throws Exception {

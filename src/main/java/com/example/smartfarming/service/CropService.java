@@ -29,40 +29,22 @@ public class CropService {
     final MessagingService messagingService;
 
     @PostConstruct
-    public String saveCrops() throws MqttException {
+    public void saveCrops() throws MqttException {
         ArrayList<CropDto> crops = readCropsFromJson();
         for (CropDto cropDto : crops) {
             saveCrop("-1", cropDto);
         }
-        return "The data has been retrieved.";
     }
 
     public String saveCrop(String sensorId, CropDto cropDto) throws MqttException {
-        Optional<Crop> cropOptional = cropRepository.findByName(cropDto.getName());
-        if (cropOptional.isEmpty()) {
-            Crop crop = new Crop();
-            BeanUtils.copyProperties(cropDto, crop);
-            crop.setId(UUID.randomUUID().toString())
-                    .setTimeStamp(LocalDateTime.now())
-                    .setSensorId(sensorId);
-            cropRepository.save(crop);
-            publishCrops(crop);
-            return "Crop is saved.";
-        }
-        return "Crop couldn't be saved.";
-    }
-
-    public List<CropDto> showCrops() {
-        List<CropDto> cropDtoArrayList = new ArrayList<>();
-        List<Crop> cropArrayList = cropRepository.findAll();
-
-        for (Crop crop : cropArrayList) {
-            CropDto cropDto = new CropDto();
-            BeanUtils.copyProperties(crop, cropDto);
-            cropDtoArrayList.add(cropDto);
-        }
-
-        return cropDtoArrayList;
+        Crop crop = new Crop();
+        BeanUtils.copyProperties(cropDto, crop);
+        crop.setId(UUID.randomUUID().toString())
+                .setTimeStamp(LocalDateTime.now())
+                .setSensorId(sensorId);
+        cropRepository.save(crop);
+        publishCrops(crop);
+        return "Publishing successfully!";
     }
 
     public List<CropDto> showCropsUser(String email) {
@@ -84,7 +66,7 @@ public class CropService {
         messagingService.publish(crop.getSensorId() + "/crop", message, 0, true);
     }
 
-    private ArrayList<CropDto> readCropsFromJson() {
+    public ArrayList<CropDto> readCropsFromJson() {
 
         ArrayList<CropDto> cropArrayList = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();

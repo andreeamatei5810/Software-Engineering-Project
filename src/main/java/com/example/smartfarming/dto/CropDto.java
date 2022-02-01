@@ -20,7 +20,6 @@ public class CropDto {
     String leafColor;
     Long leafTemperature;
     LocalDateTime timeStamp;
-    String sensorId;
 
     public CropDto(Crop crop) {
         BeanUtils.copyProperties(crop, this);

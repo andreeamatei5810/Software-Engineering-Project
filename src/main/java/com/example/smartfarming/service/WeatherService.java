@@ -68,6 +68,7 @@ public class WeatherService {
                 .setTimeStamp(LocalDateTime.now())
                 .setSensorId(sensorId);
         BeanUtils.copyProperties(weatherDto, weather);
+        weatherRepository.save(weather);
         PublishMessage publishMessage = new PublishMessage()
                 .setTopic(sensorId + "/weather")
                 .setMessage(weather.toString())

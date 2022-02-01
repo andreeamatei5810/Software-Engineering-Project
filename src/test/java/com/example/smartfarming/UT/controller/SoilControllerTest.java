@@ -32,6 +32,7 @@ public class SoilControllerTest {
 		Assertions.assertEquals(200, response.getStatusCodeValue());
 	}
 
+	/*
 	@Test
 	void testFindAll() throws Exception {
 		Soil soil = new Soil().setId(UUID.randomUUID().toString());
@@ -39,5 +40,5 @@ public class SoilControllerTest {
 		List<SoilDto> list = soilController.findAll();
 		Assertions.assertFalse(list.isEmpty());
 	}
-
+	*/
 }
