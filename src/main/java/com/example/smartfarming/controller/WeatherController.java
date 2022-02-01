@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -18,19 +19,19 @@ public class WeatherController {
 
     final WeatherService weatherService;
 
-    @PostMapping
-    public ResponseEntity<String> publish (@RequestBody PublishWeather weatherDto) throws MqttException {
-        return ResponseEntity.ok().body(weatherService.publish(weatherDto));
+    @PostMapping("/{sensorId}")
+    public ResponseEntity<String> publish (@PathVariable String sensorId,@RequestBody PublishWeather weatherDto) throws MqttException {
+        return ResponseEntity.ok().body(weatherService.publish(sensorId,weatherDto));
     }
 
-    @GetMapping
-    public List<WeatherDto> findAll(){
-        return weatherService.findAll();
+    @GetMapping("/user")
+    public List<WeatherDto> findAllUser(Principal principal){
+        return weatherService.findAllUser(principal.getName());
     }
 
-    @GetMapping("/weather")
-    public CurrentWeather getWeather(@RequestParam String country, @RequestParam String city){
-        return weatherService.getWeather(country,city);
+    @GetMapping("/current")
+    public CurrentWeather getWeather(Principal principal){
+        return weatherService.getWeather(principal.getName());
     }
 
 

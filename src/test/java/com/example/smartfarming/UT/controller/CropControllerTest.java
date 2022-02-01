@@ -2,7 +2,6 @@ package com.example.smartfarming.UT.controller;
 
 import com.example.smartfarming.controller.CropController;
 import com.example.smartfarming.dto.CropDto;
-// import com.example.smartfarming.dto.CropDto;
 import com.example.smartfarming.entity.Crop;
 import com.example.smartfarming.repository.CropRepository;
 import org.junit.jupiter.api.Assertions;
@@ -27,17 +26,18 @@ public class CropControllerTest {
 
     @Test
     void testSaveCrops() throws Exception {
-        ResponseEntity<String> response = cropController.saveCrop(new CropDto());
-        Assertions.assertEquals("Crop is saved.", response.getBody());
+        ResponseEntity<String> response = cropController.saveCrop("123", new CropDto());
+        Assertions.assertEquals("Publishing successfully!", response.getBody());
         Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
+    /*
     @Test
     void testShowCrops() throws Exception {
         Crop crop = new Crop().setId(UUID.randomUUID().toString());
         cropRepository.save(crop);
-        List<CropDto> list = cropController.showCrops();
+        List<CropDto> list = cropController.showCropsUser();
         Assertions.assertFalse(list.isEmpty());
     }
-
+*/
 }

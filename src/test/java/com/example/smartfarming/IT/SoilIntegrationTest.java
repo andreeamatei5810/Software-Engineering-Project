@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -43,11 +44,13 @@ class SoilIntegrationTest {
 	}
 
 	@Test
+	@WithMockUser(username="test", password = "test", roles = "USER")
 	void testPublish() throws Exception {
 		PublishSoil publishSoil = new PublishSoil();
-
-		mockMvc.perform(post("/soil")
+        String sensorId = UUID.randomUUID().toString();
+		mockMvc.perform(post("/soil/" + sensorId)
 						.content(objectMapper.writeValueAsString(publishSoil))
+						.param("sensorId", sensorId)
 						.contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk());
 	}

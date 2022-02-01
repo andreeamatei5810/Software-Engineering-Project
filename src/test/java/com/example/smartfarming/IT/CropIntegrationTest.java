@@ -1,6 +1,7 @@
 package com.example.smartfarming.IT;
 
 import com.example.smartfarming.dto.CropDto;
+import com.example.smartfarming.dto.PublishSoil;
 import com.example.smartfarming.entity.Crop;
 import com.example.smartfarming.repository.CropRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -43,14 +45,17 @@ class CropIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username="test", password = "test", roles = "USER")
     void testSaveCrop() throws Exception {
         CropDto cropDto = new CropDto();
-
-        mockMvc.perform(post("/crop/addCrop")
+        String sensorId = UUID.randomUUID().toString();
+        mockMvc.perform(post("/crop/addCrop/" + sensorId)
                         .content(objectMapper.writeValueAsString(cropDto))
+                        .param("sensorId", sensorId)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
+                        .andExpect(status().isOk());
     }
+
 
     @Test
     void testShowCrops() throws Exception {

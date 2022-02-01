@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class Soil{
+public class Soil {
 
 	@Id
 	String id;
@@ -23,6 +23,7 @@ public class Soil{
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	LocalDateTime timeStamp;
+	String sensorId;
 	Integer moisture;
 	Long pH;
 	Integer residualNitrates;

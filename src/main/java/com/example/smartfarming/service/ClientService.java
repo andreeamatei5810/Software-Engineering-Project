@@ -5,6 +5,7 @@ import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,15 +20,18 @@ public class ClientService {
 	public String register(ClientRegister clientRegister) {
 		Optional<Client> clientOptional = clientRepository.findByEmail(clientRegister.getEmail());
 		if (clientOptional.isPresent()){
-			return "Exista un cont cu mail-ul asta";
+			return "There is an account with this email";
 		} else if(clientRegister.getPassword().equals(clientRegister.getPasswordCheck())) {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			Client client = new Client();
 			BeanUtils.copyProperties(clientRegister,client);
-			client.setId(UUID.randomUUID().toString());
+			client.setPassword(encoder.encode(client.getPassword()));
+			String id = UUID.randomUUID().toString();
+			client.setId(id);
 			clientRepository.save(client);
-			return "V-ati inregistrat cu succes";
+			return id;
 		} else {
-			return "Parolele nu se potrivesc!";
+			return "Passwords do not match!";
 		}
 	}
 }

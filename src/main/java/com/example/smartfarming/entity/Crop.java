@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,6 +16,8 @@ public class Crop {
     @Id
     String id;
     String name;
+    LocalDateTime timeStamp;
+    String sensorId;
     Long height ;
     String leafColor;
     Long leafTemperature;

@@ -33,10 +33,11 @@ class SoilServiceTest {
 	@Test
 	void testPublish() throws Exception {
 		PublishSoil publishSoil = new PublishSoil();
-		String message = soilService.publish(publishSoil);
-		Assertions.assertEquals("Publicarea a fost cu succes!", message);
+		String message = soilService.publish("123", publishSoil);
+		Assertions.assertEquals("Publishing successfully!", message);
 	}
 
+	/*
 	@Test
 	void testFindAll() throws Exception {
 		Soil soil = new Soil().setId(UUID.randomUUID().toString());
@@ -44,5 +45,5 @@ class SoilServiceTest {
 		List<SoilDto> list = soilService.findAll();
 		Assertions.assertFalse(list.isEmpty());
 	}
-
+	*/
 }

@@ -36,7 +36,7 @@ public class IrrigationService {
                 irrigationSystem.setId(UUID.randomUUID().toString()).setPower(true)
                         .setTimeStamp(LocalDateTime.now()).setWaterAmount(20 - soil.getMoisture()).setSoil(soil);
                 PublishMessage publishMessage = new PublishMessage()
-                        .setTopic("/irrigation")
+                        .setTopic("irrigation")
                         .setMessage(irrigationSystem.toString())
                         .setQos(0)
                         .setRetained(true);
@@ -55,7 +55,7 @@ public class IrrigationService {
                 irrigationSystem.setId(UUID.randomUUID().toString()).setPower(false)
                         .setTimeStamp(LocalDateTime.now()).setSoil(soil);
                 PublishMessage publishMessage = new PublishMessage()
-                        .setTopic("/irrigation")
+                        .setTopic("irrigation")
                         .setMessage(irrigationSystem.toString())
                         .setQos(0)
                         .setRetained(true);
@@ -63,6 +63,7 @@ public class IrrigationService {
             }
         }
     }
+
 
 
 

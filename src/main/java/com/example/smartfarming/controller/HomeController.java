@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.time.LocalDate;
 
 @RestController
@@ -18,10 +19,9 @@ public class HomeController {
 
     final HomeService homeService;
 
-    //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @GetMapping
-    public ResponseEntity<HomeDto> home(@RequestParam(value = "date", required = false, defaultValue = "#{T(java.time.LocalDate).now().minusMonths(6)}") LocalDate date) {
-        return ResponseEntity.ok().body(homeService.getReport(date));
+    public ResponseEntity<HomeDto> home(@RequestParam(value = "date", required = false, defaultValue = "#{T(java.time.LocalDate).now().minusMonths(6)}") LocalDate date, Principal principal) {
+        return ResponseEntity.ok().body(homeService.getReport(date,principal.getName()));
     }
 
 }

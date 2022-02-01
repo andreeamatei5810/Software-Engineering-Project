@@ -4,7 +4,9 @@ import com.example.smartfarming.dto.CurrentWeather;
 import com.example.smartfarming.dto.PublishMessage;
 import com.example.smartfarming.dto.PublishWeather;
 import com.example.smartfarming.dto.WeatherDto;
+import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.entity.Weather;
+import com.example.smartfarming.repository.ClientRepository;
 import com.example.smartfarming.repository.WeatherRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -38,6 +40,7 @@ public class WeatherService {
     @Value("${api.weather.key}")
     private String apiKey;
     final WeatherRepository weatherRepository;
+    final ClientRepository clientRepository;
     final MessagingService messagingService;
     @Autowired
     final RestTemplate restTemplate;
@@ -53,28 +56,31 @@ public class WeatherService {
             weatherList.forEach(soil -> soil
                     .setId(UUID.randomUUID().toString())
                     .setTimeStamp(LocalDateTime.now())
+                    .setSensorId("-1")
             );
             weatherRepository.saveAll(weatherList);
         }
     }
 
-    public String publish(PublishWeather weatherDto) throws MqttException {
+    public String publish(String sensorId, PublishWeather weatherDto) throws MqttException {
         Weather weather = new Weather()
                 .setId(UUID.randomUUID().toString())
-                .setTimeStamp(LocalDateTime.now());
+                .setTimeStamp(LocalDateTime.now())
+                .setSensorId(sensorId);
         BeanUtils.copyProperties(weatherDto, weather);
+        weatherRepository.save(weather);
         PublishMessage publishMessage = new PublishMessage()
-                .setTopic("/weather")
+                .setTopic(sensorId + "/weather")
                 .setMessage(weather.toString())
                 .setQos(0)
                 .setRetained(true);
         messagingService.publish(publishMessage);
-        return "Publicarea a fost cu succes!";
+        return "Publishing successfully!";
     }
 
-    public List<WeatherDto> findAll() {
+    public List<WeatherDto> findAllUser(String email) {
         List<WeatherDto> weatherDtos = new ArrayList<>();
-        weatherRepository.findAll().forEach(soil -> {
+        weatherRepository.findAllByEmail(email).forEach(soil -> {
             WeatherDto weatherDto = new WeatherDto();
             BeanUtils.copyProperties(soil, weatherDto);
             weatherDtos.add(weatherDto);
@@ -82,8 +88,9 @@ public class WeatherService {
         return weatherDtos;
     }
 
-    public CurrentWeather getWeather(String country, String city) {
-        URI url = new UriTemplate(WEATHER_URL).expand(city, country, apiKey);
+    public CurrentWeather getWeather(String email) {
+        Client client = clientRepository.findByEmail(email).get();
+        URI url = new UriTemplate(WEATHER_URL).expand(client.getCity(), client.getCountry(), apiKey);
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         try {

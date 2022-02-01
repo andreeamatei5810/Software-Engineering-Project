@@ -2,7 +2,9 @@ package com.example.smartfarming.service;
 
 import com.example.smartfarming.dto.MqttSubscribeModel;
 import com.example.smartfarming.dto.PublishMessage;
+import com.example.smartfarming.entity.Sensor;
 import com.example.smartfarming.entity.Soil;
+import com.example.smartfarming.repository.SensorRepository;
 import com.example.smartfarming.repository.SoilRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,18 +28,13 @@ public class MessagingService {
 	List<MqttSubscribeModel> messages = new ArrayList<>();
 	List<Soil> soilMessages = new ArrayList<>();
 	final SoilRepository soilRepository;
-
+	final SensorRepository sensorRepository;
 
 	public void subscribeSoil(final Integer waitMillis) throws MqttException, InterruptedException {
-		CountDownLatch countDownLatch = new CountDownLatch(10);
-		ObjectMapper mapper = new ObjectMapper();
-		mqttClient.subscribe("/soil", (s, mqttMessage) -> {
-			Soil soil = mapper.readValue(mqttMessage.getPayload(), Soil.class);
-			soilMessages.add(soil);
-			soilRepository.save(soil);
-			countDownLatch.countDown();
-		});
-		countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
+		List<Sensor> sensorList = sensorRepository.findAll();
+		for(Sensor sensor:sensorList){
+			addSoilSubscribe(waitMillis, sensor);
+		}
 	}
 
 
@@ -69,7 +66,6 @@ public class MessagingService {
 
 	public MqttSubscribeModel subscribeList(final String topic, final Integer waitMillis) throws MqttException, InterruptedException {
 		CountDownLatch countDownLatch = new CountDownLatch(10);
-		MqttSubscribeModel mqttSubscribeModelOut;
 		mqttClient.subscribe(topic, (s, mqttMessage) -> {
 			MqttSubscribeModel mqttSubscribeModel = new MqttSubscribeModel();
 			mqttSubscribeModel.setId(mqttMessage.getId());
@@ -90,6 +86,18 @@ public class MessagingService {
 
 	public List<Soil> getSoils() {
 		return soilMessages;
+	}
+
+	public void addSoilSubscribe(final Integer waitMillis, Sensor newSensor) throws MqttException, InterruptedException{
+		CountDownLatch countDownLatch = new CountDownLatch(10);
+		ObjectMapper mapper = new ObjectMapper();
+		mqttClient.subscribe((newSensor.getId() + "/soil"), (s, mqttMessage) -> {
+			Soil soil = mapper.readValue(mqttMessage.getPayload(), Soil.class);
+			soilMessages.add(soil);
+			soilRepository.save(soil);
+			countDownLatch.countDown();
+		});
+		countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
 	}
 
 
