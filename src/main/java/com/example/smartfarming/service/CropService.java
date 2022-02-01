@@ -59,6 +59,20 @@ public class CropService {
         return cropDtoArrayList;
     }
 
+    public List<CropDto> showCropsUser(String email) {
+        List<CropDto> cropDtoArrayList = new ArrayList<>();
+        List<Crop> cropArrayList = cropRepository.findAllByEmail(email);
+
+        for (Crop crop : cropArrayList) {
+            CropDto cropDto = new CropDto();
+            BeanUtils.copyProperties(crop, cropDto);
+            cropDtoArrayList.add(cropDto);
+        }
+
+        return cropDtoArrayList;
+    }
+
+
     private void publishCrops(Crop crop) throws MqttException {
         String message = crop.toString();
         messagingService.publish(crop.getSensorId() + "/crop", message,0, true);

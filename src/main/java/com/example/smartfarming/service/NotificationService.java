@@ -32,6 +32,7 @@ public class NotificationService {
     @Scheduled(fixedRate = 60*5000, initialDelay = 60*1000)
     public void sendNotifications(){
         clientRepository.findAll().forEach(client -> {
+            System.out.println(client);
             CurrentWeather currentWeather = weatherService.getWeather(client.getEmail());
             if (currentWeather.getWeatherDescription().compareTo("Clear") != 0) {
                 String cityWeather = "Weather in " + client.getCity() +": " + currentWeather.getWeatherDescription().toLowerCase() + ". "
