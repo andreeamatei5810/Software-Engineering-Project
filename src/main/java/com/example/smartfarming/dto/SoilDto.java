@@ -15,6 +15,7 @@ public class SoilDto {
 
 	String id;
 	LocalDateTime timeStamp;
+	String sensorId;
 	Integer moisture;
 	Long pH;
 	Integer residualNitrates;

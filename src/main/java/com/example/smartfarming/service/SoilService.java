@@ -40,30 +40,42 @@ public class SoilService {
 			soilList.forEach(soil -> soil
 						.setId(UUID.randomUUID().toString())
 						.setTimeStamp(LocalDateTime.now())
+					.setSensorId("-1")
 			);
 			soilRepository.saveAll(soilList);
 		}
 	}
 
-	public String publish(PublishSoil soilDto) throws MqttException, IOException {
+	public String publish(String sensorId, PublishSoil soilDto) throws MqttException, IOException {
 		Soil soil = new Soil()
 				.setId(UUID.randomUUID().toString())
-				.setTimeStamp(LocalDateTime.now());
+				.setTimeStamp(LocalDateTime.now())
+				.setSensorId(sensorId);
 		BeanUtils.copyProperties(soilDto, soil);
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonSoil = mapper.writeValueAsString(soil);
 		PublishMessage publishMessage = new PublishMessage()
-				.setTopic("/soil")
+				.setTopic(sensorId + "/soil")
 				.setMessage(jsonSoil)
 				.setQos(0)
 				.setRetained(true);
 		messagingService.publish(publishMessage);
+		soilRepository.save(soil);
 		return "Publicarea a fost cu succes!";
 	}
 
 	public List<SoilDto> findAll(){
 		List<SoilDto> soilDtos = new ArrayList<>();
 		soilRepository.findAll().forEach(soil -> {
+			SoilDto soilDto = new SoilDto(soil);
+			soilDtos.add(soilDto);
+		});
+		return soilDtos;
+	}
+
+	public List<SoilDto> findAllUser(String email){
+		List<SoilDto> soilDtos = new ArrayList<>();
+		soilRepository.findAllByEmail(email).forEach(soil -> {
 			SoilDto soilDto = new SoilDto(soil);
 			soilDtos.add(soilDto);
 		});

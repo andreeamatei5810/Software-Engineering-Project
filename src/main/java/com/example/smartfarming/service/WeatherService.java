@@ -53,18 +53,20 @@ public class WeatherService {
             weatherList.forEach(soil -> soil
                     .setId(UUID.randomUUID().toString())
                     .setTimeStamp(LocalDateTime.now())
+                    .setSensorId("-1")
             );
             weatherRepository.saveAll(weatherList);
         }
     }
 
-    public String publish(PublishWeather weatherDto) throws MqttException {
+    public String publish(String sensorId, PublishWeather weatherDto) throws MqttException {
         Weather weather = new Weather()
                 .setId(UUID.randomUUID().toString())
-                .setTimeStamp(LocalDateTime.now());
+                .setTimeStamp(LocalDateTime.now())
+                .setSensorId(sensorId);
         BeanUtils.copyProperties(weatherDto, weather);
         PublishMessage publishMessage = new PublishMessage()
-                .setTopic("/weather")
+                .setTopic(sensorId + "/weather")
                 .setMessage(weather.toString())
                 .setQos(0)
                 .setRetained(true);

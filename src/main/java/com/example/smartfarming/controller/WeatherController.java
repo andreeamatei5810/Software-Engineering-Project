@@ -18,9 +18,9 @@ public class WeatherController {
 
     final WeatherService weatherService;
 
-    @PostMapping
-    public ResponseEntity<String> publish (@RequestBody PublishWeather weatherDto) throws MqttException {
-        return ResponseEntity.ok().body(weatherService.publish(weatherDto));
+    @PostMapping("/{sensorId}")
+    public ResponseEntity<String> publish (@PathVariable String sensorId,@RequestBody PublishWeather weatherDto) throws MqttException {
+        return ResponseEntity.ok().body(weatherService.publish(sensorId,weatherDto));
     }
 
     @GetMapping

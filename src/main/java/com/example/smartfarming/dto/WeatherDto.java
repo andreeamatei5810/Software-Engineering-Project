@@ -10,6 +10,7 @@ public class WeatherDto {
 
     String id;
     LocalDateTime timeStamp;
+    String sensorId;
     String infoMessage;
     Integer temperature;
     Integer humidity;
