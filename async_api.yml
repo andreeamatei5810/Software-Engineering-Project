@@ -13,17 +13,25 @@ servers:
     protocol: mqtt
 
 channels:
-  crop:
+  sensorId/crop:
     publish:
         message:
           $ref: '#/components/messages/PublishCrop'
-  /soil:
+  sensorId/soil:
     publish:
       message:
         $ref: '#/components/messages/PublishSoil'
     subscribe:
         message:
             $ref: '#/components/messages/SubscribeSoil'
+  sensorId/weather:
+    publish:
+      message:
+        $ref: '#/components/messages/PublishWeather'
+  irrigation:
+    publish:
+      message:
+        $ref: '#/components/messages/PublishIrrigation'
 
 components:
     messages:
@@ -33,6 +41,16 @@ components:
         payload:
           type: object
           properties:
+            id:
+              type: string
+              description: "Crop id"
+            sensorId:
+              type: string
+              description: "The id of the sensor to which the crop is associated"
+            timeStamp:
+              type: string
+              format: date-time
+              description: "The date the crop information was taken over"
             name:
               type: string
               description: "Crop name"
@@ -54,6 +72,9 @@ components:
             id:
               type: string
               description: "Soil id"
+            sensorId:
+              type: string
+              description: "The id of the sensor to which the soil is associated"
             timeStamp:
               type: string
               format: date-time
@@ -78,13 +99,16 @@ components:
                 description: "Soil permeability"
       SubscribeSoil:
         title: Subscribe soil
-        summary: To start the irrigation system, the subscribe to topic /soil is used to take information about the soil.
+        summary: To start the irrigation system, the subscribe to topic sensorId/soil is used to take information about the soil.
         payload:
           type: string
           properties:
             id:
               type: string
               description: "Soil id"
+            sensorId:
+              type: string
+              description: "The id of the sensor to which the soil is associated"
             timeStamp:
               type: string
               format: date-time
@@ -107,3 +131,53 @@ components:
             permeability:
               type: number
               description: "Soil permeability"
+      PublishWeather:
+        title: Publish weather
+        summary: Each time a new weather is added, a message with the contents of the weather is published.
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+              description: "Weather id"
+            sensorId:
+              type: string
+              description: "The id of the sensor to which the weather is associated"
+            timeStamp:
+              type: string
+              format: date-time
+              description: "The date the weather information was taken over"
+            infoMessage:
+              type: string
+              description: "Weather description taken by sensors"
+            temperature:
+              type: integer
+              description: "Temperature"
+            humidity:
+              type: integer
+              description: "Humidity level in the air"
+            wind:
+              type: integer
+              description: "Wind power"
+      PublishIrrigation:
+        title: Publish irrigation
+        summary: Each time the irrigation system is turned off / on by the device a message is published with the details of the irrigation system.
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+              description: "Weather id"
+            waterAmount:
+              type: integer
+              description: "The amount of water needed for the soil to be given by the irrigation system"
+            timeStamp:
+              type: string
+              format: date-time
+              description: "Date on which the irrigation system is switched off / on"
+            power:
+              type: boolean
+              description: "The irrigation system is turned off or on"
+            soil:
+              type: object
+              description: "The soil associated with the irrigation system"
