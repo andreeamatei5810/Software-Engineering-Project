@@ -1,10 +1,12 @@
 package com.example.smartfarming.service;
 
+import com.example.smartfarming.SmartFarmingApplication;
 import com.example.smartfarming.dto.CurrentWeather;
 import com.example.smartfarming.dto.NotificationDto;
 import com.example.smartfarming.dto.NotificationsListDto;
 import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.entity.Notification;
+import com.example.smartfarming.exception.CustomException;
 import com.example.smartfarming.repository.ClientRepository;
 import com.example.smartfarming.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +49,12 @@ public class NotificationService {
     }
 
 
-    public NotificationsListDto getAllNotifications(String email){
-        Optional<Client> client = clientRepository.findByEmail(email);
+    public NotificationsListDto getAllNotifications(){
+        Client currentUser = SmartFarmingApplication.getCurrentUser();
+        if(currentUser == null) {
+            throw new CustomException("You need to be logged in to do this operation!");
+        }
+        Optional<Client> client = clientRepository.findByEmail(currentUser.getEmail());
         List<NotificationDto> notificationDtos = new ArrayList<>();
         NotificationsListDto notificationsListDto = new NotificationsListDto();
         if(client.isPresent()) {

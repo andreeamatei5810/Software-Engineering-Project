@@ -1,9 +1,12 @@
 package com.example.smartfarming.service;
 
+import com.example.smartfarming.SmartFarmingApplication;
 import com.example.smartfarming.dto.PublishMessage;
 import com.example.smartfarming.dto.PublishSoil;
 import com.example.smartfarming.dto.SoilDto;
+import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.entity.Soil;
+import com.example.smartfarming.exception.CustomException;
 import com.example.smartfarming.repository.SoilRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +50,10 @@ public class SoilService {
 	}
 
 	public String publish(String sensorId, PublishSoil soilDto) throws MqttException, IOException {
+		Client currentUser = SmartFarmingApplication.getCurrentUser();
+		if(currentUser == null) {
+			throw new CustomException("You need to be logged in to do this operation!");
+		}
 		Soil soil = new Soil()
 				.setId(UUID.randomUUID().toString())
 				.setTimeStamp(LocalDateTime.now())
@@ -64,9 +71,13 @@ public class SoilService {
 		return "Publishing successfully!";
 	}
 
-	public List<SoilDto> findAllUser(String email){
+	public List<SoilDto> findAllUser(){
+		Client currentUser = SmartFarmingApplication.getCurrentUser();
+		if(currentUser == null) {
+			throw new CustomException("You need to be logged in to do this operation!");
+		}
 		List<SoilDto> soilDtos = new ArrayList<>();
-		soilRepository.findAllByEmail(email).forEach(soil -> {
+		soilRepository.findAllByEmail(currentUser.getEmail()).forEach(soil -> {
 			SoilDto soilDto = new SoilDto(soil);
 			soilDtos.add(soilDto);
 		});

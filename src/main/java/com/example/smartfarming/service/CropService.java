@@ -1,7 +1,10 @@
 package com.example.smartfarming.service;
 
+import com.example.smartfarming.SmartFarmingApplication;
 import com.example.smartfarming.dto.CropDto;
+import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.entity.Crop;
+import com.example.smartfarming.exception.CustomException;
 import com.example.smartfarming.repository.CropRepository;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -32,11 +35,21 @@ public class CropService {
     public void saveCrops() throws MqttException {
         ArrayList<CropDto> crops = readCropsFromJson();
         for (CropDto cropDto : crops) {
-            saveCrop("-1", cropDto);
+            Crop crop = new Crop();
+            BeanUtils.copyProperties(cropDto, crop);
+            crop.setId(UUID.randomUUID().toString())
+                    .setTimeStamp(LocalDateTime.now())
+                    .setSensorId("-1");
+            cropRepository.save(crop);
+            publishCrops(crop);
         }
     }
 
     public String saveCrop(String sensorId, CropDto cropDto) throws MqttException {
+        Client currentUser = SmartFarmingApplication.getCurrentUser();
+        if(currentUser == null) {
+            throw new CustomException("You need to be logged in to do this operation!");
+        }
         Crop crop = new Crop();
         BeanUtils.copyProperties(cropDto, crop);
         crop.setId(UUID.randomUUID().toString())
@@ -47,9 +60,14 @@ public class CropService {
         return "Publishing successfully!";
     }
 
-    public List<CropDto> showCropsUser(String email) {
+    public List<CropDto> showCropsUser() {
+        Client currentUser = SmartFarmingApplication.getCurrentUser();
+        if(currentUser == null) {
+            throw new CustomException("You need to be logged in to do this operation!");
+        }
+
         List<CropDto> cropDtoArrayList = new ArrayList<>();
-        List<Crop> cropArrayList = cropRepository.findAllByEmail(email);
+        List<Crop> cropArrayList = cropRepository.findAllByEmail(currentUser.getEmail());
 
         for (Crop crop : cropArrayList) {
             CropDto cropDto = new CropDto();

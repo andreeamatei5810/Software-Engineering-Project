@@ -1,11 +1,13 @@
 package com.example.smartfarming.service;
 
+import com.example.smartfarming.SmartFarmingApplication;
 import com.example.smartfarming.dto.CurrentWeather;
 import com.example.smartfarming.dto.PublishMessage;
 import com.example.smartfarming.dto.PublishWeather;
 import com.example.smartfarming.dto.WeatherDto;
 import com.example.smartfarming.entity.Client;
 import com.example.smartfarming.entity.Weather;
+import com.example.smartfarming.exception.CustomException;
 import com.example.smartfarming.repository.ClientRepository;
 import com.example.smartfarming.repository.WeatherRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,6 +65,10 @@ public class WeatherService {
     }
 
     public String publish(String sensorId, PublishWeather weatherDto) throws MqttException {
+        Client currentUser = SmartFarmingApplication.getCurrentUser();
+        if(currentUser == null) {
+            throw new CustomException("You need to be logged in to do this operation!");
+        }
         Weather weather = new Weather()
                 .setId(UUID.randomUUID().toString())
                 .setTimeStamp(LocalDateTime.now())
@@ -78,14 +84,39 @@ public class WeatherService {
         return "Publishing successfully!";
     }
 
-    public List<WeatherDto> findAllUser(String email) {
+    public List<WeatherDto> findAllUser() {
+        Client currentUser = SmartFarmingApplication.getCurrentUser();
+        if(currentUser == null) {
+            throw new CustomException("You need to be logged in to do this operation!");
+        }
         List<WeatherDto> weatherDtos = new ArrayList<>();
-        weatherRepository.findAllByEmail(email).forEach(soil -> {
+        weatherRepository.findAllByEmail(currentUser.getEmail()).forEach(soil -> {
             WeatherDto weatherDto = new WeatherDto();
             BeanUtils.copyProperties(soil, weatherDto);
             weatherDtos.add(weatherDto);
         });
         return weatherDtos;
+    }
+
+    public CurrentWeather getWeather() {
+        Client currentUser = SmartFarmingApplication.getCurrentUser();
+        if(currentUser == null) {
+            throw new CustomException("You need to be logged in to do this operation!");
+        }
+        Client client = clientRepository.findByEmail(currentUser.getEmail()).get();
+        URI url = new UriTemplate(WEATHER_URL).expand(client.getCity(), client.getCountry(), apiKey);
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        try {
+            JsonNode root = objectMapper.readTree(response.getBody());
+            return new CurrentWeather()
+                    .setWeatherDescription(root.path("weather").get(0).path("main").asText())
+                    .setTemp(root.path("main").path("temp").asLong())
+                    .setFeelsLike(root.path("main").path("feels_like").asLong())
+                    .setWindSpeed(root.path("wind").path("speed").asLong());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error parsing JSON", e);
+        }
     }
 
     public CurrentWeather getWeather(String email) {
@@ -104,7 +135,5 @@ public class WeatherService {
             throw new RuntimeException("Error parsing JSON", e);
         }
     }
-
-
     }
 

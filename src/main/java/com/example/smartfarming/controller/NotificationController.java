@@ -16,8 +16,8 @@ public class NotificationController {
     final NotificationService notificationService;
 
     @GetMapping
-    public NotificationsListDto getAllNotifications(Principal principal){
-        return notificationService.getAllNotifications(principal.getName());
+    public NotificationsListDto getAllNotifications(){
+        return notificationService.getAllNotifications();
     }
 
 }

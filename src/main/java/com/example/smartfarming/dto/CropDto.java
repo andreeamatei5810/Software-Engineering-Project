@@ -19,7 +19,6 @@ public class CropDto {
     Long height;
     String leafColor;
     Long leafTemperature;
-    LocalDateTime timeStamp;
 
     public CropDto(Crop crop) {
         BeanUtils.copyProperties(crop, this);

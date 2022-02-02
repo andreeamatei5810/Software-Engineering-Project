@@ -1,5 +1,6 @@
 package com.example.smartfarming.controller;
 
+import com.example.smartfarming.dto.ClientLogin;
 import com.example.smartfarming.dto.ClientRegister;
 import com.example.smartfarming.service.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -23,4 +24,9 @@ public class ClientController {
 		return ResponseEntity.ok().body(clientService.register(clientRegister));
 	}
 
+
+	@PostMapping("/login")
+	public ResponseEntity<String> login (@RequestBody ClientLogin clientLogin) {
+		return ResponseEntity.ok().body(clientService.login(clientLogin));
+	}
 }

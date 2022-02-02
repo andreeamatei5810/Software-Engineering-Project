@@ -23,8 +23,8 @@ public class CropController {
     }
 
     @GetMapping("/showCropsUser")
-    public List<CropDto> showCropsUser(Principal principal) {
-        return cropService.showCropsUser(principal.getName());
+    public List<CropDto> showCropsUser() {
+        return cropService.showCropsUser();
     }
 
 }

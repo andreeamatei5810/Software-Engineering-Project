@@ -39,7 +39,6 @@ public class MessagingService {
 		}
 	}
 
-
 	public void publish(final String topic, final String payload, int qos, boolean retained)
 			throws MqttException {
 		MqttMessage mqttMessage = new MqttMessage();

@@ -25,8 +25,8 @@ public class SoilController {
 	}
 
 	@GetMapping("/user")
-	public List<SoilDto> findAllUser(Principal principal){
-		return soilService.findAllUser(principal.getName());
+	public List<SoilDto> findAllUser(){
+		return soilService.findAllUser();
 	}
 
 }

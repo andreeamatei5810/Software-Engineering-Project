@@ -1,8 +1,11 @@
 package com.example.smartfarming.service;
 
+import com.example.smartfarming.SmartFarmingApplication;
 import com.example.smartfarming.dto.CropDto;
 import com.example.smartfarming.dto.HomeDto;
 import com.example.smartfarming.dto.SoilDto;
+import com.example.smartfarming.entity.Client;
+import com.example.smartfarming.exception.CustomException;
 import com.example.smartfarming.repository.CropRepository;
 import com.example.smartfarming.repository.SoilRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +24,13 @@ public class HomeService {
     final SoilRepository soilRepository;
     final CropRepository cropRepository;
 
-    public HomeDto getReport(LocalDate date, String email) {
-
-        List<SoilDto> soilDtos = soilRepository.findAllByTimeStampAndEmail(date.atStartOfDay(), email).stream().map(SoilDto::new).collect(Collectors.toList());
-        List<CropDto> cropDtos = cropRepository.findAllByTimeStampAndEmail(date.atStartOfDay(), email).stream().map(CropDto::new).collect(Collectors.toList());
+    public HomeDto getReport(LocalDate date) {
+        Client currentUser = SmartFarmingApplication.getCurrentUser();
+        if(currentUser == null) {
+            throw new CustomException("You need to be logged in to do this operation!");
+        }
+        List<SoilDto> soilDtos = soilRepository.findAllByTimeStampAndEmail(date.atStartOfDay(), currentUser.getEmail()).stream().map(SoilDto::new).collect(Collectors.toList());
+        List<CropDto> cropDtos = cropRepository.findAllByTimeStampAndEmail(date.atStartOfDay(), currentUser.getEmail()).stream().map(CropDto::new).collect(Collectors.toList());
         double averageLeafTemp = 0.0;
         double averageSoilMoisture = 0.0;
         double percentageNitratesNormal = 0.0;

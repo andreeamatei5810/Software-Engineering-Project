@@ -25,13 +25,13 @@ public class WeatherController {
     }
 
     @GetMapping("/user")
-    public List<WeatherDto> findAllUser(Principal principal){
-        return weatherService.findAllUser(principal.getName());
+    public List<WeatherDto> findAllUser(){
+        return weatherService.findAllUser();
     }
 
     @GetMapping("/current")
-    public CurrentWeather getWeather(Principal principal){
-        return weatherService.getWeather(principal.getName());
+    public CurrentWeather getWeather(){
+        return weatherService.getWeather();
     }
 
 

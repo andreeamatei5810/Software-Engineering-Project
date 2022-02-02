@@ -20,8 +20,8 @@ public class HomeController {
     final HomeService homeService;
 
     @GetMapping
-    public ResponseEntity<HomeDto> home(@RequestParam(value = "date", required = false, defaultValue = "#{T(java.time.LocalDate).now().minusMonths(6)}") LocalDate date, Principal principal) {
-        return ResponseEntity.ok().body(homeService.getReport(date,principal.getName()));
+    public ResponseEntity<HomeDto> home(@RequestParam(value = "date", required = false, defaultValue = "#{T(java.time.LocalDate).now().minusMonths(6)}") LocalDate date) {
+        return ResponseEntity.ok().body(homeService.getReport(date));
     }
 
 }
