@@ -58,10 +58,10 @@ class CropIntegrationTest {
 
 
     @Test
+    @WithMockUser(username="test", password = "test", roles = "USER")
     void testShowCrops() throws Exception {
         cropRepository.save(new Crop().setId(UUID.randomUUID().toString()));
-
-        mockMvc.perform(get("/crop/showCrops"))
+        mockMvc.perform(get("/crop/showCropsUser"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(not(empty()))));
 
