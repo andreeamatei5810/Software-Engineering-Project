@@ -6,9 +6,58 @@ info:
 servers:
   - url: http://localhost:8080
 paths:
-  /soil:
+  /crop/addCrop/{sensorId}:
     post:
-      description: Auto generated using Swagger Inspector
+      description: A new crop is added
+      parameters:
+        - in: path
+          name: sensorId
+          schema:
+            type: string
+          example: 49f49621-4dee-431a-bb5d-b3a70466dc67
+          required: true
+          description: The id of the sensor associated with the crop
+      security:
+        - BasicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                timeStamp:
+                  type: string
+                leafColor:
+                  type: string
+                leafTemperature:
+                  type: number
+                name:
+                  type: string
+                height:
+                  type: number
+            examples:
+              '0':
+                value: "{\r\n  \"name\": \"Onion\",\r\n  \"height\": 75,\r\n  \"leafColor\": \"Yellow\",\r\n  \"leafTemperature\": 20,\r\n  \"timeStamp\": \"2022-02-02T10:44:29.255Z\"\r\n}"
+      responses:
+        '200':
+          description: Crop was added
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /soil/{sensorId}:
+    post:
+      description: A new soil is added
+      parameters:
+        - in: path
+          name: sensorId
+          schema:
+            type: string
+          example: 49f49621-4dee-431a-bb5d-b3a70466dc67
+          required: true
+          description: The id of the sensor associated with the soil
+      security:
+        - BasicAuth: []
       requestBody:
         content:
           application/json:
@@ -16,26 +65,369 @@ paths:
               type: object
               properties:
                 density:
-                  type: integer
+                  type: number
                 texture:
                   type: string
                 permeability:
-                  type: integer
+                  type: number
                 ph:
-                  type: integer
+                  type: number
                 nutrientLevels:
-                  type: integer
+                  type: number
                 moisture:
                   type: integer
                 residualNitrates:
                   type: integer
             examples:
               '0':
-                value: "{\r\n  \"moisture\": 4,\r\n  \"residualNitrates\": 5,\r\n  \"nutrientLevels\": 1,\r\n  \"texture\": \"nisip\",\r\n  \"density\": 3,\r\n  \"permeability\": 1,\r\n  \"ph\": 2\r\n}"
+                value: "{\r\n  \"moisture\": 20,\r\n  \"residualNitrates\": 10,\r\n  \"nutrientLevels\": 3,\r\n  \"texture\": \"silty loam\",\r\n  \"density\": 1,\r\n  \"permeability\": 6,\r\n  \"ph\": 8\r\n}"
       responses:
-        default:
-          description: Auto generated using Swagger Inspector
+        '200':
+          description: Soil was added
       servers:
         - url: http://localhost:8080
     servers:
       - url: http://localhost:8080
+  /weather/current:
+    get:
+      description: Get current weather from the weather API for the country and city of the logged in user
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: The current weather has been returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feelsLike:
+                    type: number
+                  temp:
+                    type: number
+                  weatherDescription:
+                    type: string
+                  windSpeed:
+                    type: number
+              examples:
+                '0':
+                  value: >-
+                    {"weatherDescription":"Clouds","temp":2,"feelsLike":-1,"windSpeed":3}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /client/register:
+    post:
+      description: User registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country:
+                  type: string
+                password:
+                  type: string
+                city:
+                  type: string
+                passwordCheck:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+            examples:
+              '0':
+                value: "{\r\n  \"email\": \"test@gmail.com\",\r\n  \"password\": \"password123\",\r\n  \"passwordCheck\": \"password123\",\r\n  \"name\": \"test\",\r\n  \"city\": \"Warsaw\",\r\n  \"country\": \"Poland\"\r\n}"
+      responses:
+        '200':
+          description: Registration was successful
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /home:
+    get:
+      description: The customer harvest data is generated
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Harvest data returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  averageSoilMoisture:
+                    type: number
+                  percentageNitratesNormal:
+                    type: number
+                  averageLeafTemp:
+                    type: number
+                  densityAnomalies:
+                    type: array
+                    items:
+                      type: string
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /sensor:
+    post:
+      description: A new sensor is added to the device
+      parameters:
+        - name: clientId
+          in: query
+          schema:
+            type: string
+          example: 198eb35c-9148-48c9-8370-c55c1256270b
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Senor added
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /weather/user:
+    get:
+      description: Displays all weather data taken by the sensors for the logged in user
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Successful display
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"id":"c251180d-1430-4c1f-b60e-94e89873c9fa","timeStamp":"2022-02-02T12:52:20.960527","sensorId":"49f49621-4dee-431a-bb5d-b3a70466dc67","infoMessage":"Clear","temperature":25,"humidity":5,"wind":1}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /mqtt/publish:
+    post:
+      description: Publish a message to the broker
+      security:
+        - BasicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                retained:
+                  type: boolean
+                qos:
+                  type: integer
+                topic:
+                  type: string
+                message:
+                  type: string
+            examples:
+              '0':
+                value: "{\r\n  \"topic\": \"Test\",\r\n  \"message\": \"Test message\",\r\n  \"retained\": true,\r\n  \"qos\": 0\r\n}"
+      responses:
+        '200':
+          description: Published message
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /soil/user:
+    get:
+      description: Displays all soil data taken by the sensors for the logged in user
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Successful display
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"id":"2703b6c4-2f52-4fe0-8498-dfb544e692a1","timeStamp":"2022-02-02T12:51:06","sensorId":"49f49621-4dee-431a-bb5d-b3a70466dc67","moisture":20,"residualNitrates":10,"nutrientLevels":3,"texture":"silty
+                    loam","density":1,"permeability":6,"ph":8}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /notification:
+    get:
+      description: Displays notifications received by the user when the weather is unfavorable for the harvest
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Successful display
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numberOfNewMessages:
+                    type: integer
+                  notifications:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timeStamp:
+                          type: string
+                        clientId:
+                          type: string
+                        read:
+                          type: boolean
+                        message:
+                          type: string
+              examples:
+                '0':
+                  value: >-
+                    {"numberOfNewMessages":0,"notifications":[{"clientId":"198eb35c-9148-48c9-8370-c55c1256270b","message":"Weather
+                    in Warsaw: clouds. It is necessary to protect the crop so
+                    that there is no
+                    damage.","timeStamp":"2022-02-02T12:42:35.68566","read":true},{"clientId":"198eb35c-9148-48c9-8370-c55c1256270b","message":"Weather
+                    in Warsaw: clouds. It is necessary to protect the crop so
+                    that there is no
+                    damage.","timeStamp":"2022-02-02T12:47:35.656863","read":true},{"clientId":"198eb35c-9148-48c9-8370-c55c1256270b","message":"Weather
+                    in Warsaw: clouds. It is necessary to protect the crop so
+                    that there is no
+                    damage.","timeStamp":"2022-02-02T12:52:35.646644","read":true}]}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /mqtt/subscribe:
+    get:
+      description: Subscribe to a topic
+      security:
+        - BasicAuth: []
+      parameters:
+        - name: wait_millis
+          in: query
+          schema:
+            type: string
+          example: '2000'
+        - name: topic
+          in: query
+          schema:
+            type: string
+          example: Test
+      responses:
+        '200':
+          description: Successful subscribe
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /mqtt/all:
+    get:
+      description: Get all the posts from the subscribed topics
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Successful display
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"message":"Test message","qos":0,"id":0},{"message":"Test
+                    message","qos":0,"id":0}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /weather/{sensorId}:
+    post:
+      description: A new weather is added
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: sensorId
+          schema:
+            type: string
+          example: 49f49621-4dee-431a-bb5d-b3a70466dc67
+          required: true
+          description: The id of the sensor associated with the weather
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                temperature:
+                  type: integer
+                humidity:
+                  type: integer
+                infoMessage:
+                  type: string
+                wind:
+                  type: integer
+            examples:
+              '0':
+                value: "{\r\n  \"infoMessage\": \"Clear\",\r\n  \"temperature\": 25,\r\n  \"humidity\": 5,\r\n  \"wind\": 1\r\n}"
+      responses:
+        '200':
+          description: Weather was added
+          content:
+            text/plain;charset=UTF-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /crop/showCropsUser:
+    get:
+      description: Displays all crop data taken by the sensors for the logged in user
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Successful display
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"name":"cucumber","height":75,"leafColor":"green","leafTemperature":20,"timeStamp":"2022-02-02T12:48:04.545583"}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

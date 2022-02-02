@@ -14,8 +14,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +46,7 @@ public class MessagingService {
 		mqttMessage.setPayload(payload.getBytes());
 		mqttMessage.setQos(qos);
 		mqttMessage.setRetained(retained);
-
+		mqttMessage.setId((int) (System.currentTimeMillis() & 0xfffffff));
 		mqttClient.publish(topic, mqttMessage);
 	}
 
@@ -54,7 +56,7 @@ public class MessagingService {
 		mqttMessage.setPayload(publishMessage.getMessage().getBytes());
 		mqttMessage.setQos(publishMessage.getQos());
 		mqttMessage.setRetained(publishMessage.getRetained());
-
+		mqttMessage.setId((int) (System.currentTimeMillis() & 0xfffffff));
 		mqttClient.publish(publishMessage.getTopic(), mqttMessage);
 	}
 
