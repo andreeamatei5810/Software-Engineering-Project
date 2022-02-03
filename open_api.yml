@@ -303,27 +303,6 @@ paths:
         - url: http://localhost:8080
     servers:
       - url: http://localhost:8080
-  /mqtt/subscribe:
-    get:
-      description: Subscribe to a topic
-      parameters:
-        - name: wait_millis
-          in: query
-          schema:
-            type: integer
-          example: '2000'
-        - name: topic
-          in: query
-          schema:
-            type: string
-          example: Test
-      responses:
-        '200':
-          description: Successful subscribe
-      servers:
-        - url: http://localhost:8080
-    servers:
-      - url: http://localhost:8080
   /weather/{sensorId}:
     post:
       description: A new weather is added
