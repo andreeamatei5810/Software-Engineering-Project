@@ -234,35 +234,6 @@ paths:
         - url: http://localhost:8080
     servers:
       - url: http://localhost:8080
-  /mqtt/publish:
-    post:
-      description: Publish a message to the broker
-      security:
-        - BasicAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                retained:
-                  type: boolean
-                qos:
-                  type: integer
-                topic:
-                  type: string
-                message:
-                  type: string
-            examples:
-              '0':
-                value: "{\r\n  \"topic\": \"Test\",\r\n  \"message\": \"Test message\",\r\n  \"retained\": true,\r\n  \"qos\": 0\r\n}"
-      responses:
-        '200':
-          description: Published message
-      servers:
-        - url: http://localhost:8080
-    servers:
-      - url: http://localhost:8080
   /soil/user:
     get:
       description: Displays all soil data taken by the sensors for the logged in user
@@ -349,28 +320,6 @@ paths:
       responses:
         '200':
           description: Successful subscribe
-      servers:
-        - url: http://localhost:8080
-    servers:
-      - url: http://localhost:8080
-  /mqtt/all:
-    get:
-      description: Get all the posts from the subscribed topics
-      responses:
-        '200':
-          description: Successful display
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                properties: {}
-              examples:
-                '0':
-                  value: >-
-                    [{"message":"Test message","qos":0,"id":0},{"message":"Test
-                    message","qos":0,"id":0}]
       servers:
         - url: http://localhost:8080
     servers:
