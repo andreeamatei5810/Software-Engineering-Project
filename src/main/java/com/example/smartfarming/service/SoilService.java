@@ -43,7 +43,7 @@ public class SoilService {
 			soilList.forEach(soil -> soil
 						.setId(UUID.randomUUID().toString())
 						.setTimeStamp(LocalDateTime.now())
-					.setSensorId("-1")
+					.setSensorId("1")
 			);
 			soilRepository.saveAll(soilList);
 		}
