@@ -1,16 +1,16 @@
 package com.example.smartfarming.IT;
 
+import com.example.smartfarming.dto.ClientLogin;
 import com.example.smartfarming.dto.CropDto;
-import com.example.smartfarming.dto.PublishSoil;
 import com.example.smartfarming.entity.Crop;
 import com.example.smartfarming.repository.CropRepository;
+import com.example.smartfarming.service.ClientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -35,18 +35,21 @@ class CropIntegrationTest {
     ObjectMapper objectMapper;
 
     @Autowired
+    ClientService clientService;
+
+    @Autowired
     private WebApplicationContext webApplicationContext;
 
     MockMvc mockMvc;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
     @Test
-    @WithMockUser(username="test", password = "test", roles = "USER")
     void testSaveCrop() throws Exception {
+        clientService.login(new ClientLogin().setEmail("test").setPassword("parola"));
         CropDto cropDto = new CropDto();
         String sensorId = UUID.randomUUID().toString();
         mockMvc.perform(post("/crop/addCrop/" + sensorId)
@@ -58,9 +61,9 @@ class CropIntegrationTest {
 
 
     @Test
-    @WithMockUser(username="test", password = "test", roles = "USER")
     void testShowCrops() throws Exception {
-        cropRepository.save(new Crop().setId(UUID.randomUUID().toString()));
+        cropRepository.save(new Crop().setId(UUID.randomUUID().toString()).setSensorId("-1"));
+        clientService.login(new ClientLogin().setEmail("test").setPassword("parola"));
         mockMvc.perform(get("/crop/showCropsUser"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(not(empty()))));

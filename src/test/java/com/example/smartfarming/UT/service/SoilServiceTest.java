@@ -1,9 +1,11 @@
 package com.example.smartfarming.UT.service;
 
+import com.example.smartfarming.dto.ClientLogin;
 import com.example.smartfarming.dto.PublishSoil;
 import com.example.smartfarming.dto.SoilDto;
 import com.example.smartfarming.entity.Soil;
 import com.example.smartfarming.repository.SoilRepository;
+import com.example.smartfarming.service.ClientService;
 import com.example.smartfarming.service.SoilService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,8 @@ class SoilServiceTest {
 	private SoilService soilService;
 	@Autowired
 	private SoilRepository soilRepository;
+	@Autowired
+	ClientService clientService;
 
 	@Test
 	void testInitDb() throws IOException {
@@ -32,18 +36,20 @@ class SoilServiceTest {
 
 	@Test
 	void testPublish() throws Exception {
+		clientService.login(new ClientLogin().setEmail("test").setPassword("parola"));
 		PublishSoil publishSoil = new PublishSoil();
 		String message = soilService.publish("123", publishSoil);
 		Assertions.assertEquals("Publishing successfully!", message);
 	}
 
-	/*
+
 	@Test
-	void testFindAll() throws Exception {
-		Soil soil = new Soil().setId(UUID.randomUUID().toString());
+	void testFindAll() {
+		clientService.login(new ClientLogin().setEmail("test").setPassword("parola"));
+		Soil soil = new Soil().setId(UUID.randomUUID().toString()).setSensorId("-1");
 		soilRepository.save(soil);
-		List<SoilDto> list = soilService.findAll();
+		List<SoilDto> list = soilService.findAllUser();
 		Assertions.assertFalse(list.isEmpty());
 	}
-	*/
+
 }

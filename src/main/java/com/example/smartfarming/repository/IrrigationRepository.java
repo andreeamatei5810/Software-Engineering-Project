@@ -10,4 +10,7 @@ public interface IrrigationRepository extends JpaRepository<IrrigationSystem,Str
 
     Optional<IrrigationSystem> findBySoil(Soil soil);
 
+    Optional<IrrigationSystem> findBySoilOrderByTimeStampDesc(Soil soil);
+
+
 }

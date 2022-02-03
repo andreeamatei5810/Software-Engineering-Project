@@ -14,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +33,7 @@ public class NotificationService {
     @Scheduled(fixedRate = 60*5000, initialDelay = 60*1000)
     public void sendNotifications(){
         clientRepository.findAll().forEach(client -> {
+                    System.out.println(client.getEmail()+ "  " + client.getCity());
             CurrentWeather currentWeather = weatherService.getWeather(client.getEmail());
             if (currentWeather.getWeatherDescription().compareTo("Clear") != 0) {
                 String cityWeather = "Weather in " + client.getCity() +": " + currentWeather.getWeatherDescription().toLowerCase() + ". "

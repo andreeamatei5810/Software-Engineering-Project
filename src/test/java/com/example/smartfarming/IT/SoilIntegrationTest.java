@@ -1,15 +1,16 @@
 package com.example.smartfarming.IT;
 
+import com.example.smartfarming.dto.ClientLogin;
 import com.example.smartfarming.dto.PublishSoil;
 import com.example.smartfarming.entity.Soil;
 import com.example.smartfarming.repository.SoilRepository;
+import com.example.smartfarming.service.ClientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,6 +32,9 @@ class SoilIntegrationTest {
 	SoilRepository soilRepository;
 
 	@Autowired
+	ClientService clientService;
+
+	@Autowired
 	ObjectMapper objectMapper;
 
 	@Autowired
@@ -39,13 +43,13 @@ class SoilIntegrationTest {
 	MockMvc mockMvc;
 
 	@BeforeEach
-	public void setup() throws Exception {
+	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 	}
 
 	@Test
-	@WithMockUser(username="test", password = "test", roles = "USER")
 	void testPublish() throws Exception {
+		clientService.login(new ClientLogin().setEmail("test").setPassword("parola"));
 		PublishSoil publishSoil = new PublishSoil();
         String sensorId = UUID.randomUUID().toString();
 		mockMvc.perform(post("/soil/" + sensorId)
@@ -57,9 +61,9 @@ class SoilIntegrationTest {
 
 	@Test
 	void testFindAll() throws Exception {
-		soilRepository.save(new Soil().setId(UUID.randomUUID().toString()));
-
-		mockMvc.perform(get("/soil"))
+		clientService.login(new ClientLogin().setEmail("test").setPassword("parola"));
+		soilRepository.save(new Soil().setId(UUID.randomUUID().toString()).setSensorId("-1"));
+		mockMvc.perform(get("/soil/user"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", is(not(empty()))));
 

@@ -28,7 +28,7 @@ public class SensorService {
                 .setId(sensorId)
                 .setClientId(clientId);
         sensorRepository.save(sensor);
-        messagingService.addSoilSubscribe(2000, sensor);
+        messagingService.addSoilSubscribe(1, sensor);
         return sensorId;
     }
 }

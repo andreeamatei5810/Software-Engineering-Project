@@ -1,6 +1,5 @@
 package com.example.smartfarming.service;
 
-import com.example.smartfarming.dto.MqttSubscribeModel;
 import com.example.smartfarming.dto.PublishMessage;
 import com.example.smartfarming.entity.Sensor;
 import com.example.smartfarming.entity.Soil;
@@ -14,10 +13,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +24,6 @@ public class MessagingService {
 
 	@Autowired
 	private IMqttClient mqttClient;
-	List<MqttSubscribeModel> messages = new ArrayList<>();
 	List<Soil> soilMessages = new ArrayList<>();
 	final SoilRepository soilRepository;
 	final SensorRepository sensorRepository;
@@ -59,31 +55,6 @@ public class MessagingService {
 		mqttClient.publish(publishMessage.getTopic(), mqttMessage);
 	}
 
-	public void subscribe(final String topic) throws MqttException {
-		System.out.println("Messages received:");
-
-		mqttClient.subscribeWithResponse(topic, (tpic, msg) -> System.out.println(msg.getId() + " -> " + new String(msg.getPayload())));
-	}
-
-	public MqttSubscribeModel subscribeList(final String topic, final Integer waitMillis) throws MqttException, InterruptedException {
-		CountDownLatch countDownLatch = new CountDownLatch(10);
-		mqttClient.subscribe(topic, (s, mqttMessage) -> {
-			MqttSubscribeModel mqttSubscribeModel = new MqttSubscribeModel();
-			mqttSubscribeModel.setId(mqttMessage.getId());
-			mqttSubscribeModel.setMessage(new String(mqttMessage.getPayload()));
-			mqttSubscribeModel.setQos(mqttMessage.getQos());
-			messages.add(mqttSubscribeModel);
-			countDownLatch.countDown();
-		});
-
-		countDownLatch.await(waitMillis, TimeUnit.MILLISECONDS);
-
-		return null;
-	}
-
-	public List<MqttSubscribeModel> showAllReceived() {
-		return messages;
-	}
 
 	public List<Soil> getSoils() {
 		return soilMessages;

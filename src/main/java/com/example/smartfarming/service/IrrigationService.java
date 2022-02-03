@@ -40,6 +40,7 @@ public class IrrigationService {
                         .setMessage(irrigationSystem.toString())
                         .setQos(0)
                         .setRetained(true);
+                irrigationRepository.save(irrigationSystem);
                 messagingService.publish(publishMessage);
             }
         }
@@ -59,6 +60,7 @@ public class IrrigationService {
                         .setMessage(irrigationSystem.toString())
                         .setQos(0)
                         .setRetained(true);
+                irrigationRepository.save(irrigationSystem);
                 messagingService.publish(publishMessage);
             }
         }
